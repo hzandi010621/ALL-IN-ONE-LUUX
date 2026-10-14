@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="LUUX Business Intelligence — 영업실적, 주요 이슈, 경쟁매체 모니터링, 광고 현황, 옥외광고 효과 리포트를 한 곳에서 확인하는 내부 포털" />
+  <meta name="description" content="LUUX Business Intelligence — 주요 이슈, 경쟁매체 모니터링, 광고 현황, 옥외광고 효과 리포트를 한 곳에서 확인하는 내부 포털" />
   <title>LUUX Business Intelligence</title>
 
   <style>
@@ -251,201 +251,6 @@
       box-shadow:0 0 0 3px rgba(216,255,62,.26);
     }
 
-    /* Sales performance */
-    .sales-panel{
-      padding:22px;
-      border:1px solid var(--line);
-      border-radius:var(--radius-xl);
-      background:var(--surface);
-      box-shadow:0 14px 40px rgba(0,0,0,.035);
-    }
-    .kpi-grid{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:12px;
-      margin-bottom:18px;
-    }
-    .kpi{
-      min-height:132px;
-      padding:20px;
-      border-radius:18px;
-      background:var(--bg);
-      border:1px solid #e8e8e3;
-    }
-    .kpi.primary{
-      background:var(--accent);
-      border-color:var(--accent);
-    }
-    .kpi-label{
-      color:#686868;
-      font-size:11px;
-      font-weight:800;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-    }
-    .kpi.primary .kpi-label{color:#303030}
-    .kpi-value{
-      display:flex;
-      align-items:baseline;
-      gap:5px;
-      margin-top:17px;
-      font-size:33px;
-      line-height:1;
-      font-weight:900;
-      letter-spacing:-.055em;
-    }
-    .kpi-value small{
-      font-size:13px;
-      font-weight:700;
-      letter-spacing:-.02em;
-      color:#666;
-    }
-    .kpi.primary .kpi-value small{color:#333}
-    .kpi-note{
-      margin-top:10px;
-      color:#7b7b7b;
-      font-size:11px;
-    }
-    .kpi.primary .kpi-note{color:#3c3c3c}
-
-    .progress{
-      height:5px;
-      margin-top:12px;
-      background:rgba(17,17,17,.10);
-      border-radius:999px;
-      overflow:hidden;
-    }
-    .progress span{
-      display:block;
-      height:100%;
-      border-radius:999px;
-      background:#111;
-    }
-
-    .table-wrap{
-      overflow-x:auto;
-      border:1px solid var(--line);
-      border-radius:18px;
-    }
-    table{
-      width:100%;
-      min-width:1180px;
-      border-collapse:separate;
-      border-spacing:0;
-      font-size:12px;
-      background:#fff;
-    }
-    thead th{
-      position:sticky;
-      top:0;
-      padding:13px 11px;
-      background:#181818;
-      color:white;
-      font-weight:700;
-      text-align:center;
-      white-space:nowrap;
-      border-right:1px solid #303030;
-    }
-    thead th:first-child,
-    thead th:nth-child(2){text-align:center}
-    thead th:first-child{border-radius:0}
-    tbody th,
-    tbody td{
-      padding:12px 11px;
-      border-right:1px solid #ecece7;
-      border-bottom:1px solid #ecece7;
-      white-space:nowrap;
-      text-align:center;
-    }
-    tbody th{
-      text-align:center;
-      font-weight:700;
-    }
-    tbody tr:last-child th,
-    tbody tr:last-child td{border-bottom:0}
-    tbody td:last-child,
-    thead th:last-child{border-right:0}
-
-    .group-cell{
-      vertical-align:middle;
-      background:#ffffff;
-      color:#4c4c4c;
-      font-weight:800;
-      text-align:center;
-      letter-spacing:-.02em;
-    }
-    .metric{
-      text-align:center !important;
-      font-weight:700;
-    }
-    .sum-row th,
-    .sum-row td{
-      background:#ffffff;
-      font-weight:800;
-    }
-    .target-row th,
-    .target-row td{
-      color:#606060;
-      background:#ffffff;
-    }
-    .rate-row th,
-    .rate-row td{
-      background:#ffffff;
-      font-weight:800;
-    }
-    .damg-row th,
-    .damg-row td{
-      background:#171717 !important;
-      color:#ffffff !important;
-      font-weight:900;
-      border-color:#303030;
-    }
-
-    /* Interactive focus: clean at rest, useful on click */
-    tbody tr{
-      cursor:pointer;
-    }
-    tbody tr:not(.damg-row):hover th,
-    tbody tr:not(.damg-row):hover td{
-      background:#f8f8f5;
-    }
-    tbody tr.row-active:not(.damg-row) th,
-    tbody tr.row-active:not(.damg-row) td{
-      background:#f3f6e8 !important;
-    }
-    tbody td.col-active,
-    tbody th.col-active{
-      background:#fafbf4 !important;
-    }
-    tbody tr.row-active td.col-active,
-    tbody tr.row-active th.col-active{
-      background:#eaf2cf !important;
-      color:#111 !important;
-      font-weight:900;
-    }
-    tbody td.cell-active,
-    tbody th.cell-active{
-      box-shadow:inset 0 0 0 2px rgba(17,17,17,.14);
-    }
-    .damg-row td.col-active,
-    .damg-row th.col-active,
-    .damg-row td.cell-active,
-    .damg-row th.cell-active{
-      background:#171717 !important;
-      color:#fff !important;
-      box-shadow:inset 0 0 0 2px rgba(216,255,62,.55);
-    }
-
-    .table-note{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      margin-top:12px;
-      color:#777;
-      font-size:11px;
-    }
-
     /* Resource cards */
     .grid{
       display:grid;
@@ -567,10 +372,6 @@
       color:#111;
       font-weight:800;
     }
-
-    @media (max-width:1050px){
-      .kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-    }
     @media (max-width:900px){
       .nav-links{display:none}
       .hero-card{padding:32px;min-height:470px}
@@ -586,7 +387,6 @@
       }
       .section-head{align-items:flex-start;flex-direction:column}
       .grid{grid-template-columns:1fr}
-      .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
     @media (max-width:560px){
       .shell{width:min(calc(100% - 22px), var(--max))}
@@ -595,10 +395,6 @@
       h1{font-size:46px}
       .hero-copy{font-size:15px}
       section{padding:40px 0}
-      .sales-panel{padding:14px;border-radius:20px}
-      .kpi-grid{grid-template-columns:1fr 1fr;gap:8px}
-      .kpi{padding:16px;min-height:120px}
-      .kpi-value{font-size:27px}
       .tool-card{padding:22px;min-height:280px}
       .footer-row{align-items:flex-start;flex-direction:column}
   
@@ -651,11 +447,10 @@
       </a>
 
       <nav class="nav-links" aria-label="주요 메뉴">
-        <a href="#sales">Sales Performance</a>
         <a href="#tools">Resources</a>
       </nav>
 
-      <a class="nav-cta" href="#sales">
+      <a class="nav-cta" href="#tools">
         Explore
         <span aria-hidden="true">↓</span>
       </a>
@@ -675,7 +470,6 @@
         </p>
 
         <div class="hero-actions">
-          <a href="#sales">LUUX 영업실적</a>
           <a href="#tools">2027 주요 이슈</a>
           <a href="#tools">경쟁매체 모니터링</a>
           <a href="#tools">경쟁매체 대시보드</a>
@@ -688,133 +482,6 @@
         </div>
       </div>
     </div>
-
-    <section id="sales">
-      <div class="shell">
-        <div class="section-head">
-          <div>
-            <p class="kicker">Sales Performance</p>
-            <h2>LUUX 영업실적</h2>
-          </div>
-          <div class="asof">
-            <span class="asof-dot"></span>
-            기준일자 2026.10.12
-          </div>
-        </div>
-
-        <div class="sales-panel">
-
-          <div class="kpi-grid">
-            <div class="kpi primary">
-              <div class="kpi-label">AD본부 누적 매출액</div>
-              <div class="kpi-value">83.37<small>억</small></div>
-              <div class="kpi-note">1~10월 누적 기준</div>
-            </div>
-
-            <div class="kpi">
-              <div class="kpi-label">AD본부 매출 달성률</div>
-              <div class="kpi-value">92.8<small>%</small></div>
-              <div class="progress"><span style="width:92.8%"></span></div>
-              <div class="kpi-note">목표 89.87억</div>
-            </div>
-
-            <div class="kpi">
-              <div class="kpi-label">DAMG 누적 매출액</div>
-              <div class="kpi-value">90.95<small>억</small></div>
-              <div class="kpi-note">1~10월 누적 기준</div>
-            </div>
-
-            <div class="kpi">
-              <div class="kpi-label">DAMG 매출 달성률</div>
-              <div class="kpi-value">93.0<small>%</small></div>
-              <div class="progress"><span style="width:93%"></span></div>
-              <div class="kpi-note">목표 97.80억</div>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table aria-label="LUUX 월별 영업실적">
-              <thead>
-                <tr>
-                  <th>구분</th>
-                  <th>내용</th>
-                  <th>1월</th>
-                  <th>2월</th>
-                  <th>3월</th>
-                  <th>4월</th>
-                  <th>5월</th>
-                  <th>6월</th>
-                  <th>7월</th>
-                  <th>8월</th>
-                  <th>9월</th>
-                  <th class="current-month">10월</th>
-                  <th>11월</th>
-                  <th>12월</th>
-                  <th>계</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th class="group-cell" rowspan="5">AD본부</th>
-                  <th class="metric">LG+채널A</th>
-                  <td>3.60</td><td>3.60</td><td>2.60</td><td>2.60</td><td>2.60</td><td>2.60</td>
-                  <td>2.60</td><td>2.60</td><td>3.60</td><td class="current-month">3.60</td><td>4.10</td><td>3.60</td><td><strong>37.70</strong></td>
-                </tr>
-                <tr>
-                  <th class="metric">자체실적</th>
-                  <td>3.90</td><td>1.50</td><td>6.12</td><td>1.61</td><td>5.06</td><td>7.95</td>
-                  <td>4.46</td><td>3.34</td><td>9.06</td><td class="current-month">10.38</td><td>7.01</td><td>3.70</td><td><strong>64.08</strong></td>
-                </tr>
-                <tr class="sum-row">
-                  <th class="metric">실적 계</th>
-                  <td>7.50</td><td>5.10</td><td>8.72</td><td>4.21</td><td>7.66</td><td>10.55</td>
-                  <td>7.06</td><td>5.94</td><td>12.66</td><td class="current-month">13.98</td><td>11.11</td><td>7.30</td><td>101.78</td>
-                </tr>
-                <tr class="target-row">
-                  <th class="metric">목표</th>
-                  <td>7.25</td><td>5.38</td><td>8.37</td><td>9.01</td><td>11.05</td><td>10.08</td>
-                  <td>7.31</td><td>7.02</td><td>11.77</td><td class="current-month">12.63</td><td>9.53</td><td>12.60</td><td>112.00</td>
-                </tr>
-                <tr class="rate-row">
-                  <th class="metric">달성률</th>
-                  <td>103.4%</td><td>94.8%</td><td>104.0%</td><td>46.7%</td>
-                  <td>69.3%</td><td>104.7%</td><td>96.6%</td><td>84.6%</td>
-                  <td>107.6%</td><td class="current-month">110.7%</td><td>116.6%</td><td>57.9%</td><td>90.9%</td>
-                </tr>
-
-                <tr>
-                  <th class="group-cell" rowspan="3">계열사외</th>
-                  <th class="metric">동아닷컴</th>
-                  <td>0.33</td><td>–</td><td>0.47</td><td>0.11</td><td>0.21</td><td>0.45</td>
-                  <td>0.59</td><td>0.43</td><td>0.46</td><td class="current-month">0.56</td><td>0.60</td><td>0.54</td><td><strong>4.74</strong></td>
-                </tr>
-                <tr>
-                  <th class="metric">채널, 렙A 등</th>
-                  <td>–</td><td>–</td><td>0.86</td><td>0.19</td><td>0.64</td><td>0.34</td>
-                  <td>0.01</td><td>0.65</td><td>0.77</td><td class="current-month">0.52</td><td>–</td><td>–</td><td><strong>3.98</strong></td>
-                </tr>
-                <tr class="sum-row">
-                  <th class="metric">실적 계</th>
-                  <td>0.33</td><td>0</td><td>1.33</td><td>0.30</td><td>0.85</td><td>0.79</td>
-                  <td>0.60</td><td>1.08</td><td>1.23</td><td class="current-month">1.08</td><td>0.60</td><td>0.54</td><td>8.72</td>
-                </tr>
-
-                <tr class="damg-row">
-                  <th colspan="2">DAMG 합계</th>
-                  <td>7.83</td><td>5.10</td><td>10.05</td><td>4.51</td><td>8.51</td><td>11.34</td>
-                  <td>7.66</td><td>7.02</td><td>13.89</td><td class="current-month">15.06</td><td>11.71</td><td>7.84</td><td>110.51</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="table-note">
-            <div>월별 실적 및 목표 데이터 · 기준일자 2026.10.12</div>
-            <div>셀을 클릭하면 해당 행·열을 강조해서 볼 수 있습니다.</div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <section id="tools">
       <div class="shell">
@@ -949,61 +616,7 @@
     </div>
   </footer>
 
-  <script>
-    (() => {
-      const table = document.querySelector('table[aria-label="LUUX 월별 영업실적"]');
-      if (!table) return;
 
-      const rows = Array.from(table.tBodies[0].rows);
-
-      const clearFocus = () => {
-        rows.forEach(row => {
-          row.classList.remove('row-active');
-          Array.from(row.cells).forEach(cell => {
-            cell.classList.remove('col-active', 'cell-active');
-          });
-        });
-      };
-
-      table.tBodies[0].addEventListener('click', (event) => {
-        const cell = event.target.closest('th, td');
-        const row = event.target.closest('tr');
-        if (!cell || !row) return;
-
-        const wasActive = cell.classList.contains('cell-active');
-
-        let visualColumn = 0;
-        for (const current of Array.from(row.cells)) {
-          if (current === cell) break;
-          visualColumn += current.colSpan || 1;
-        }
-
-        clearFocus();
-        if (wasActive) return;
-
-        row.classList.add('row-active');
-        cell.classList.add('cell-active');
-
-        rows.forEach(currentRow => {
-          let start = 0;
-          for (const currentCell of Array.from(currentRow.cells)) {
-            const span = currentCell.colSpan || 1;
-            if (visualColumn >= start && visualColumn < start + span) {
-              currentCell.classList.add('col-active');
-              break;
-            }
-            start += span;
-          }
-        });
-      });
-
-      document.addEventListener('click', (event) => {
-        if (!event.target.closest('table[aria-label="LUUX 월별 영업실적"]')) {
-          clearFocus();
-        }
-      });
-    })();
-  </script>
 
 </body>
 </html>
