@@ -641,9 +641,7 @@
 
   <script>
     (() => {
-      /* ONE-TIME SETUP:
-         Apps Script 배포 후 받은 /exec URL을 아래 한 줄에 붙여 넣으면 됩니다. */
-      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzaORSKL4ZahxlJaB3DCK-_L7BLMOyx7MBg79TTYKQAHUb7h26EKRQzSDpbuDI2M0R8tg/exec';
+      const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9tBGfbDQ03YixorFANZlqUvGWy6GbcKfL8jtFcq6e5hWpsYCyr2PS577N61ZvXK9sbhyuliPEdgcZ/pub?gid=633717486&single=true&output=csv';
 
       const tabs = [...document.querySelectorAll('.main-tab')];
       const filters = [...document.querySelectorAll('.filter-btn')];
@@ -667,10 +665,33 @@
 
       function driveImageUrl(value){
         if(!value) return '';
-        const text=String(value).trim();
+        const text = String(value).trim();
+
+        // 일반 외부 이미지 URL은 그대로 사용
         if(/^https?:\/\//i.test(text) && !text.includes('drive.google.com')) return text;
-        const match=text.match(/[-\w]{20,}/);
-        const id=match ? match[0] : text;
+
+        // Drive 링크 또는 파일 ID에서 ID 추출
+        let id = '';
+        const patterns = [
+          /\/d\/([\w-]{20,})/,
+          /[?&]id=([\w-]{20,})/,
+          /\/file\/d\/([\w-]{20,})/,
+          /^([\w-]{20,})$/
+        ];
+
+        for(const pattern of patterns){
+          const match = text.match(pattern);
+          if(match){
+            id = match[1] || match[0];
+            break;
+          }
+        }
+
+        if(!id){
+          const generic = text.match(/[\w-]{20,}/);
+          if(generic) id = generic[0];
+        }
+
         if(!id) return '';
         return `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w1600`;
       }
@@ -684,19 +705,22 @@
       }
 
       function render(){
-        const list=visibleCases();
+        const list = visibleCases();
+
         if(!list.length){
-          grid.innerHTML='<div class="empty-state">등록된 사례가 없습니다.</div>';
-          message.textContent='';
+          grid.innerHTML = '<div class="empty-state">등록된 사례가 없습니다.</div>';
+          message.textContent = '';
           return;
         }
 
-        grid.innerHTML=list.map((item,index)=>{
-          const image=driveImageUrl(item.thumbnail);
-          const category=item.type==='EVENT' ? 'EVENT' : (item.industry || 'INDUSTRY');
-          const thumb=image
+        grid.innerHTML = list.map(item => {
+          const image = driveImageUrl(item.thumbnail);
+          const category = item.type === 'EVENT' ? 'EVENT' : (item.industry || 'INDUSTRY');
+
+          const thumb = image
             ? `<div class="case-thumb"><img src="${escapeHtml(image)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>`
             : `<div class="case-thumb no-image">IMAGE</div>`;
+
           return `<button class="case-card" type="button" data-id="${escapeHtml(item.id)}">
             ${thumb}
             <div class="case-meta">
@@ -707,89 +731,231 @@
           </button>`;
         }).join('');
 
-        grid.querySelectorAll('.case-card').forEach(card=>{
-          card.addEventListener('click',()=>openModal(card.dataset.id));
+        grid.querySelectorAll('.case-card').forEach(card => {
+          card.addEventListener('click', () => openModal(card.dataset.id));
         });
-        message.textContent=`${list.length} CASE${list.length>1?'S':''}`;
+
+        message.textContent = `${list.length} CASE${list.length > 1 ? 'S' : ''}`;
       }
 
       function openModal(id){
-        const item=allCases.find(x=>String(x.id)===String(id));
+        const item = allCases.find(x => String(x.id) === String(id));
         if(!item) return;
-        modalCategory.textContent=item.type==='EVENT' ? 'EVENT' : (item.industry || 'INDUSTRY');
-        modalTitle.textContent=item.title || '';
-        modalSubtitle.textContent=item.subtitle || '';
-        modalDescription.textContent=item.description || '';
 
-        const imgs=[item.thumbnail,item.detail1,item.detail2]
-          .map(driveImageUrl).filter(Boolean);
-        detailImages.innerHTML=imgs.map((url,i)=>`<img src="${escapeHtml(url)}" alt="${escapeHtml(item.title)} ${i+1}" loading="lazy">`).join('');
-        modalDescription.style.display=item.description ? 'block' : 'none';
-        detailImages.style.display=imgs.length ? 'grid' : 'none';
+        modalCategory.textContent = item.type === 'EVENT' ? 'EVENT' : (item.industry || 'INDUSTRY');
+        modalTitle.textContent = item.title || '';
+        modalSubtitle.textContent = item.subtitle || '';
+        modalDescription.textContent = item.description || '';
+
+        const imgs = [item.thumbnail, item.detail1, item.detail2]
+          .map(driveImageUrl)
+          .filter(Boolean);
+
+        detailImages.innerHTML = imgs
+          .map((url, i) => `<img src="${escapeHtml(url)}" alt="${escapeHtml(item.title)} ${i+1}" loading="lazy">`)
+          .join('');
+
+        modalDescription.style.display = item.description ? 'block' : 'none';
+        detailImages.style.display = imgs.length ? 'grid' : 'none';
+
         modal.classList.add('open');
-        modal.setAttribute('aria-hidden','false');
-        document.body.style.overflow='hidden';
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
       }
 
       function closeModal(){
         modal.classList.remove('open');
-        modal.setAttribute('aria-hidden','true');
-        document.body.style.overflow='';
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
       }
 
-      tabs.forEach(tab=>{
-        tab.addEventListener('click',()=>{
-          tabs.forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false')});
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+
           tab.classList.add('active');
-          tab.setAttribute('aria-selected','true');
-          currentTab=tab.dataset.tab.toUpperCase();
-          document.body.classList.toggle('event-mode',currentTab==='EVENT');
-          if(currentTab==='INDUSTRY'){
-            currentIndustry='ALL';
-            filters.forEach(f=>f.classList.remove('active'));
+          tab.setAttribute('aria-selected', 'true');
+
+          currentTab = tab.dataset.tab.toUpperCase();
+          document.body.classList.toggle('event-mode', currentTab === 'EVENT');
+
+          if(currentTab === 'INDUSTRY'){
+            currentIndustry = 'ALL';
+            filters.forEach(f => f.classList.remove('active'));
             filters[0].classList.add('active');
           }
+
           render();
         });
       });
 
-      filters.forEach(filter=>{
-        filter.addEventListener('click',()=>{
-          filters.forEach(f=>f.classList.remove('active'));
+      filters.forEach(filter => {
+        filter.addEventListener('click', () => {
+          filters.forEach(f => f.classList.remove('active'));
           filter.classList.add('active');
-          currentIndustry=filter.dataset.filter;
+          currentIndustry = filter.dataset.filter;
           render();
         });
       });
 
-      modalClose.addEventListener('click',closeModal);
-      modal.addEventListener('click',e=>{if(e.target===modal) closeModal()});
-      document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal()});
+      modalClose.addEventListener('click', closeModal);
+      modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+      document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
 
-      window.loadLuuxShowcase = function(payload){
-        if(!payload || payload.ok===false){
-          grid.innerHTML='<div class="error-state"><strong>데이터를 불러오지 못했습니다.</strong>Apps Script 설정을 확인해주세요.</div>';
-          return;
+      // RFC4180에 가까운 CSV parser: 쉼표/따옴표/셀 내부 줄바꿈 대응
+      function parseCsv(text){
+        const rows = [];
+        let row = [];
+        let field = '';
+        let inQuotes = false;
+
+        for(let i = 0; i < text.length; i++){
+          const ch = text[i];
+
+          if(inQuotes){
+            if(ch === '"'){
+              if(text[i+1] === '"'){
+                field += '"';
+                i++;
+              } else {
+                inQuotes = false;
+              }
+            } else {
+              field += ch;
+            }
+          } else {
+            if(ch === '"'){
+              inQuotes = true;
+            } else if(ch === ','){
+              row.push(field);
+              field = '';
+            } else if(ch === '\n'){
+              row.push(field);
+              rows.push(row);
+              row = [];
+              field = '';
+            } else if(ch !== '\r'){
+              field += ch;
+            }
+          }
         }
-        allCases=Array.isArray(payload.items) ? payload.items : [];
+
+        row.push(field);
+        if(row.some(v => v !== '')) rows.push(row);
+
+        return rows;
+      }
+
+      function normalizeRows(rows){
+        if(!rows.length) return [];
+
+        const headers = rows[0].map(h => String(h).trim());
+
+        return rows.slice(1).map((row, index) => {
+          const data = {};
+          headers.forEach((header, i) => {
+            data[header] = row[i] !== undefined ? String(row[i]).trim() : '';
+          });
+
+          return {
+            id: String(index + 2),
+            visible: (data['노출여부'] || '').toUpperCase(),
+            type: (data['구분'] || '').toUpperCase(),
+            industry: data['업종'] || '',
+            title: data['브랜드/행사명'] || '',
+            subtitle: data['캠페인/프로젝트명'] || '',
+            description: data['한줄설명'] || '',
+            thumbnail: data['대표이미지 Drive 링크 또는 파일ID'] || '',
+            detail1: data['상세이미지1 Drive 링크 또는 파일ID'] || '',
+            detail2: data['상세이미지2 Drive 링크 또는 파일ID'] || '',
+            order: Number(data['정렬순서']) || 9999
+          };
+        })
+        .filter(item => item.visible === 'Y' && (item.type === 'INDUSTRY' || item.type === 'EVENT'))
+        .sort((a,b) => a.order - b.order);
+      }
+
+      function setCases(items){
+        allCases = items;
         render();
-      };
+      }
 
-      function loadData(){
-        if(!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('PASTE_')){
-          grid.innerHTML='<div class="error-state"><strong>최초 연동 설정이 필요합니다.</strong>Apps Script 웹앱 URL을 showcase.html의 APPS_SCRIPT_URL에 한 번만 입력해주세요.</div>';
-          return;
+      function showLoadError(){
+        grid.innerHTML = `
+          <div class="error-state">
+            <strong>데이터 연결 실패</strong>
+            공개된 Google Sheet 주소와 게시 상태를 확인해주세요.
+          </div>`;
+        message.textContent = '';
+      }
+
+      // 1차: 공개 CSV 직접 호출
+      async function loadCsv(){
+        const response = await fetch(`${CSV_URL}&_=${Date.now()}`, {
+          cache:'no-store',
+          redirect:'follow'
+        });
+
+        if(!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const text = await response.text();
+        const rows = parseCsv(text);
+
+        if(!rows.length || !rows[0].includes('노출여부')){
+          throw new Error('Unexpected CSV format');
         }
-        const script=document.createElement('script');
-        const sep=APPS_SCRIPT_URL.includes('?') ? '&' : '?';
-        script.src=`${APPS_SCRIPT_URL}${sep}callback=loadLuuxShowcase&_=${Date.now()}`;
-        script.onerror=()=>{
-          grid.innerHTML='<div class="error-state"><strong>데이터 연결 실패</strong>웹앱 배포 권한과 URL을 확인해주세요.</div>';
+
+        setCases(normalizeRows(rows));
+      }
+
+      // 2차 fallback: Google Visualization JSONP
+      function loadGvizFallback(){
+        const pubBase = CSV_URL.split('/pub?')[0];
+        const gidMatch = CSV_URL.match(/[?&]gid=([^&]+)/);
+        const gid = gidMatch ? gidMatch[1] : '0';
+
+        window.__luuxGvizCallback = function(payload){
+          try{
+            const table = payload && payload.table;
+            if(!table || !Array.isArray(table.cols) || !Array.isArray(table.rows)){
+              throw new Error('Invalid gviz response');
+            }
+
+            const headers = table.cols.map(col => col.label || '');
+            const rows = [headers];
+
+            table.rows.forEach(r => {
+              rows.push(table.cols.map((_, i) => {
+                const cell = r.c && r.c[i];
+                if(!cell) return '';
+                if(cell.f !== undefined && cell.f !== null) return String(cell.f);
+                if(cell.v !== undefined && cell.v !== null) return String(cell.v);
+                return '';
+              }));
+            });
+
+            setCases(normalizeRows(rows));
+          } catch(err){
+            console.error(err);
+            showLoadError();
+          } finally {
+            delete window.__luuxGvizCallback;
+          }
         };
+
+        const script = document.createElement('script');
+        script.src = `${pubBase}/gviz/tq?gid=${encodeURIComponent(gid)}&tqx=responseHandler:__luuxGvizCallback&_=${Date.now()}`;
+        script.onerror = showLoadError;
         document.body.appendChild(script);
       }
 
-      loadData();
+      loadCsv().catch(err => {
+        console.warn('CSV fetch failed; trying gviz fallback.', err);
+        loadGvizFallback();
+      });
     })();
   </script>
 </body>
