@@ -336,6 +336,129 @@
       text-align:center;
     }
 
+
+    /* Dynamic showcase cards */
+    .archive-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:22px;
+    }
+    .case-card{
+      border:0;
+      background:transparent;
+      padding:0;
+      text-align:left;
+      cursor:pointer;
+    }
+    .case-thumb{
+      position:relative;
+      aspect-ratio:4/3;
+      overflow:hidden;
+      border-radius:18px;
+      background:#e9e9e4;
+      border:1px solid var(--line);
+    }
+    .case-thumb img{
+      width:100%;height:100%;object-fit:cover;display:block;
+      transition:transform .28s ease;
+    }
+    .case-card:hover .case-thumb img{transform:scale(1.025)}
+    .case-thumb.no-image{
+      display:grid;place-items:center;
+      color:#9a9a95;
+      font-size:12px;font-weight:800;letter-spacing:.08em;
+    }
+    .case-meta{padding:15px 3px 0}
+    .case-kicker{
+      color:#8a8a8a;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+    .case-card h3{
+      margin:7px 0 4px;
+      font-size:20px;
+      line-height:1.15;
+      letter-spacing:-.04em;
+    }
+    .case-card p{
+      margin:0;
+      color:#777;
+      font-size:13px;
+      line-height:1.5;
+    }
+    .loading-state,
+    .empty-state,
+    .error-state{
+      grid-column:1/-1;
+      padding:80px 20px;
+      text-align:center;
+      border:1px dashed #cdcdc6;
+      border-radius:20px;
+      color:#818181;
+      background:rgba(255,255,255,.45);
+      font-size:13px;
+    }
+    .error-state strong{display:block;color:#111;margin-bottom:7px}
+
+    /* Detail modal */
+    .case-modal{
+      position:fixed;inset:0;z-index:200;
+      display:none;align-items:center;justify-content:center;
+      padding:26px;
+      background:rgba(10,10,10,.58);
+      backdrop-filter:blur(10px);
+    }
+    .case-modal.open{display:flex}
+    .case-dialog{
+      width:min(100%,1020px);
+      max-height:min(88vh,900px);
+      overflow:auto;
+      border-radius:24px;
+      background:#fff;
+      box-shadow:0 30px 100px rgba(0,0,0,.28);
+    }
+    .case-dialog-head{
+      position:sticky;top:0;z-index:4;
+      display:flex;justify-content:space-between;gap:20px;align-items:flex-start;
+      padding:24px 26px 18px;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px);
+    }
+    .case-dialog-head small{
+      color:#858585;font-size:10px;font-weight:900;letter-spacing:.11em;
+    }
+    .case-dialog-head h3{
+      margin:7px 0 4px;
+      font-size:28px;line-height:1.1;letter-spacing:-.05em;
+    }
+    .case-dialog-head p{margin:0;color:#777;font-size:13px}
+    .modal-close{
+      width:38px;height:38px;flex:0 0 auto;
+      border:1px solid var(--line);border-radius:50%;
+      background:#f4f4f1;cursor:pointer;font-size:18px;
+    }
+    .case-dialog-body{padding:24px 26px 30px}
+    .case-description{margin:0 0 22px;color:#555;font-size:14px;line-height:1.75}
+    .detail-images{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .detail-images img{
+      display:block;width:100%;height:auto;border-radius:16px;border:1px solid var(--line);
+    }
+
+    @media(max-width:900px){
+      .archive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:580px){
+      .archive-grid{grid-template-columns:1fr}
+      .case-modal{padding:10px}
+      .case-dialog{max-height:92vh;border-radius:18px}
+      .case-dialog-head{padding:20px 18px 15px}
+      .case-dialog-body{padding:18px}
+      .detail-images{grid-template-columns:1fr}
+    }
+
     footer{
       padding:30px 0 42px;
       border-top:1px solid var(--line);
@@ -479,32 +602,32 @@
 
         <div class="archive-area">
           <div class="archive-grid" id="archiveGrid">
-            <article class="placeholder-card">
-              <span class="placeholder-number">CASE 01</span>
-              <strong>송출 사례</strong>
-              <span>브랜드 · 캠페인명 · 업종</span>
-            </article>
-
-            <article class="placeholder-card">
-              <span class="placeholder-number">CASE 02</span>
-              <strong>송출 사례</strong>
-              <span>브랜드 · 캠페인명 · 업종</span>
-            </article>
-
-            <article class="placeholder-card">
-              <span class="placeholder-number">CASE 03</span>
-              <strong>송출 사례</strong>
-              <span>브랜드 · 캠페인명 · 업종</span>
-            </article>
+            <div class="loading-state">Showcase 데이터를 불러오는 중입니다.</div>
           </div>
 
-          <div class="archive-message" id="archiveMessage">
-            현재는 레이아웃과 필터 구조만 구현된 상태입니다.
-          </div>
+          <div class="archive-message" id="archiveMessage"></div>
         </div>
       </div>
     </section>
   </main>
+
+
+  <div class="case-modal" id="caseModal" aria-hidden="true">
+    <div class="case-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="case-dialog-head">
+        <div>
+          <small id="modalCategory"></small>
+          <h3 id="modalTitle"></h3>
+          <p id="modalSubtitle"></p>
+        </div>
+        <button class="modal-close" id="modalClose" type="button" aria-label="닫기">×</button>
+      </div>
+      <div class="case-dialog-body">
+        <p class="case-description" id="modalDescription"></p>
+        <div class="detail-images" id="detailImages"></div>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <div class="shell footer-row">
@@ -518,83 +641,155 @@
 
   <script>
     (() => {
-      const tabs = document.querySelectorAll('.main-tab');
-      const filters = document.querySelectorAll('.filter-btn');
+      /* ONE-TIME SETUP:
+         Apps Script 배포 후 받은 /exec URL을 아래 한 줄에 붙여 넣으면 됩니다. */
+      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzaORSKL4ZahxlJaB3DCK-_L7BLMOyx7MBg79TTYKQAHUb7h26EKRQzSDpbuDI2M0R8tg/exec';
+
+      const tabs = [...document.querySelectorAll('.main-tab')];
+      const filters = [...document.querySelectorAll('.filter-btn')];
       const grid = document.getElementById('archiveGrid');
       const message = document.getElementById('archiveMessage');
+      const modal = document.getElementById('caseModal');
+      const modalClose = document.getElementById('modalClose');
+      const modalCategory = document.getElementById('modalCategory');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalSubtitle = document.getElementById('modalSubtitle');
+      const modalDescription = document.getElementById('modalDescription');
+      const detailImages = document.getElementById('detailImages');
 
-      function renderPlaceholders(type, label) {
-        if (type === 'event') {
-          grid.innerHTML = `
-            <article class="placeholder-card">
-              <span class="placeholder-number">EVENT 01</span>
-              <strong>이벤트 사례</strong>
-              <span>행사명 · 프로젝트명 · EVENT</span>
-            </article>
-            <article class="placeholder-card">
-              <span class="placeholder-number">EVENT 02</span>
-              <strong>이벤트 사례</strong>
-              <span>행사명 · 프로젝트명 · EVENT</span>
-            </article>
-            <article class="placeholder-card">
-              <span class="placeholder-number">EVENT 03</span>
-              <strong>이벤트 사례</strong>
-              <span>행사명 · 프로젝트명 · EVENT</span>
-            </article>
-          `;
-          message.textContent = '이벤트 사례는 별도 필터 없이 전체 사례가 표시되는 구조입니다.';
-        } else {
-          grid.innerHTML = `
-            <article class="placeholder-card">
-              <span class="placeholder-number">CASE 01</span>
-              <strong>${label} 송출 사례</strong>
-              <span>브랜드 · 캠페인명 · 업종</span>
-            </article>
-            <article class="placeholder-card">
-              <span class="placeholder-number">CASE 02</span>
-              <strong>${label} 송출 사례</strong>
-              <span>브랜드 · 캠페인명 · 업종</span>
-            </article>
-            <article class="placeholder-card">
-              <span class="placeholder-number">CASE 03</span>
-              <strong>${label} 송출 사례</strong>
-              <span>브랜드 · 캠페인명 · 업종</span>
-            </article>
-          `;
-          message.textContent = '현재는 레이아웃과 필터 구조만 구현된 상태입니다.';
-        }
+      let allCases = [];
+      let currentTab = 'INDUSTRY';
+      let currentIndustry = 'ALL';
+
+      const escapeHtml = (value='') => String(value)
+        .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+        .replaceAll('"','&quot;').replaceAll("'",'&#039;');
+
+      function driveImageUrl(value){
+        if(!value) return '';
+        const text=String(value).trim();
+        if(/^https?:\/\//i.test(text) && !text.includes('drive.google.com')) return text;
+        const match=text.match(/[-\w]{20,}/);
+        const id=match ? match[0] : text;
+        if(!id) return '';
+        return `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w1600`;
       }
 
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          tabs.forEach(t => {
-            t.classList.remove('active');
-            t.setAttribute('aria-selected', 'false');
-          });
+      function visibleCases(){
+        return allCases.filter(item => {
+          if(item.type !== currentTab) return false;
+          if(currentTab === 'INDUSTRY' && currentIndustry !== 'ALL' && item.industry !== currentIndustry) return false;
+          return true;
+        });
+      }
 
+      function render(){
+        const list=visibleCases();
+        if(!list.length){
+          grid.innerHTML='<div class="empty-state">등록된 사례가 없습니다.</div>';
+          message.textContent='';
+          return;
+        }
+
+        grid.innerHTML=list.map((item,index)=>{
+          const image=driveImageUrl(item.thumbnail);
+          const category=item.type==='EVENT' ? 'EVENT' : (item.industry || 'INDUSTRY');
+          const thumb=image
+            ? `<div class="case-thumb"><img src="${escapeHtml(image)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>`
+            : `<div class="case-thumb no-image">IMAGE</div>`;
+          return `<button class="case-card" type="button" data-id="${escapeHtml(item.id)}">
+            ${thumb}
+            <div class="case-meta">
+              <div class="case-kicker">${escapeHtml(category)}</div>
+              <h3>${escapeHtml(item.title)}</h3>
+              <p>${escapeHtml(item.subtitle || '')}</p>
+            </div>
+          </button>`;
+        }).join('');
+
+        grid.querySelectorAll('.case-card').forEach(card=>{
+          card.addEventListener('click',()=>openModal(card.dataset.id));
+        });
+        message.textContent=`${list.length} CASE${list.length>1?'S':''}`;
+      }
+
+      function openModal(id){
+        const item=allCases.find(x=>String(x.id)===String(id));
+        if(!item) return;
+        modalCategory.textContent=item.type==='EVENT' ? 'EVENT' : (item.industry || 'INDUSTRY');
+        modalTitle.textContent=item.title || '';
+        modalSubtitle.textContent=item.subtitle || '';
+        modalDescription.textContent=item.description || '';
+
+        const imgs=[item.thumbnail,item.detail1,item.detail2]
+          .map(driveImageUrl).filter(Boolean);
+        detailImages.innerHTML=imgs.map((url,i)=>`<img src="${escapeHtml(url)}" alt="${escapeHtml(item.title)} ${i+1}" loading="lazy">`).join('');
+        modalDescription.style.display=item.description ? 'block' : 'none';
+        detailImages.style.display=imgs.length ? 'grid' : 'none';
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden','false');
+        document.body.style.overflow='hidden';
+      }
+
+      function closeModal(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden','true');
+        document.body.style.overflow='';
+      }
+
+      tabs.forEach(tab=>{
+        tab.addEventListener('click',()=>{
+          tabs.forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false')});
           tab.classList.add('active');
-          tab.setAttribute('aria-selected', 'true');
-
-          const mode = tab.dataset.tab;
-          document.body.classList.toggle('event-mode', mode === 'event');
-
-          if (mode === 'event') {
-            renderPlaceholders('event', 'EVENT');
-          } else {
-            filters.forEach(f => f.classList.remove('active'));
+          tab.setAttribute('aria-selected','true');
+          currentTab=tab.dataset.tab.toUpperCase();
+          document.body.classList.toggle('event-mode',currentTab==='EVENT');
+          if(currentTab==='INDUSTRY'){
+            currentIndustry='ALL';
+            filters.forEach(f=>f.classList.remove('active'));
             filters[0].classList.add('active');
-            renderPlaceholders('industry', 'ALL');
           }
+          render();
         });
       });
 
-      filters.forEach(filter => {
-        filter.addEventListener('click', () => {
-          filters.forEach(f => f.classList.remove('active'));
+      filters.forEach(filter=>{
+        filter.addEventListener('click',()=>{
+          filters.forEach(f=>f.classList.remove('active'));
           filter.classList.add('active');
-          renderPlaceholders('industry', filter.dataset.filter);
+          currentIndustry=filter.dataset.filter;
+          render();
         });
       });
+
+      modalClose.addEventListener('click',closeModal);
+      modal.addEventListener('click',e=>{if(e.target===modal) closeModal()});
+      document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal()});
+
+      window.loadLuuxShowcase = function(payload){
+        if(!payload || payload.ok===false){
+          grid.innerHTML='<div class="error-state"><strong>데이터를 불러오지 못했습니다.</strong>Apps Script 설정을 확인해주세요.</div>';
+          return;
+        }
+        allCases=Array.isArray(payload.items) ? payload.items : [];
+        render();
+      };
+
+      function loadData(){
+        if(!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('PASTE_')){
+          grid.innerHTML='<div class="error-state"><strong>최초 연동 설정이 필요합니다.</strong>Apps Script 웹앱 URL을 showcase.html의 APPS_SCRIPT_URL에 한 번만 입력해주세요.</div>';
+          return;
+        }
+        const script=document.createElement('script');
+        const sep=APPS_SCRIPT_URL.includes('?') ? '&' : '?';
+        script.src=`${APPS_SCRIPT_URL}${sep}callback=loadLuuxShowcase&_=${Date.now()}`;
+        script.onerror=()=>{
+          grid.innerHTML='<div class="error-state"><strong>데이터 연결 실패</strong>웹앱 배포 권한과 URL을 확인해주세요.</div>';
+        };
+        document.body.appendChild(script);
+      }
+
+      loadData();
     })();
   </script>
 </body>
