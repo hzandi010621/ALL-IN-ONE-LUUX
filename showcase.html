@@ -586,6 +586,7 @@
         <div class="filter-wrap">
           <div class="industry-filters" id="industryFilters" aria-label="산업 필터">
             <button class="filter-btn active" type="button" data-filter="ALL">ALL</button>
+            <button class="filter-btn" type="button" data-filter="명품">명품</button>
             <button class="filter-btn" type="button" data-filter="패션·뷰티">패션·뷰티</button>
             <button class="filter-btn" type="button" data-filter="금융">금융</button>
             <button class="filter-btn" type="button" data-filter="자동차">자동차</button>
@@ -593,6 +594,7 @@
             <button class="filter-btn" type="button" data-filter="엔터테인먼트">엔터테인먼트</button>
             <button class="filter-btn" type="button" data-filter="공공·관광">공공·관광</button>
             <button class="filter-btn" type="button" data-filter="IT">IT</button>
+            <button class="filter-btn" type="button" data-filter="기업·그룹">기업·그룹</button>
           </div>
 
           <div class="event-note">
@@ -714,7 +716,7 @@
         }
 
         grid.innerHTML = list.map(item => {
-          const image = driveImageUrl(item.thumbnail);
+          const image = driveImageUrl(item.thumbnail || item.details.find(Boolean) || '');
           const category = item.type === 'EVENT' ? 'EVENT' : (item.industry || 'INDUSTRY');
 
           const thumb = image
@@ -747,12 +749,13 @@
         modalSubtitle.textContent = item.subtitle || '';
         modalDescription.textContent = item.description || '';
 
-        const imgs = [item.thumbnail, item.detail1, item.detail2]
+        const imgs = [...new Set([item.thumbnail, ...item.details]
+          .filter(Boolean)
           .map(driveImageUrl)
-          .filter(Boolean);
+          .filter(Boolean))];
 
         detailImages.innerHTML = imgs
-          .map((url, i) => `<img src="${escapeHtml(url)}" alt="${escapeHtml(item.title)} ${i+1}" loading="lazy">`)
+          .map((url, i) => `<img src="${escapeHtml(url)}" alt="${escapeHtml(item.title)} 송출 사진 ${i+1}" loading="lazy">`)
           .join('');
 
         modalDescription.style.display = item.description ? 'block' : 'none';
@@ -869,8 +872,8 @@
             subtitle: data['캠페인/프로젝트명'] || '',
             description: data['한줄설명'] || '',
             thumbnail: data['대표이미지 Drive 링크 또는 파일ID'] || '',
-            detail1: data['상세이미지1 Drive 링크 또는 파일ID'] || '',
-            detail2: data['상세이미지2 Drive 링크 또는 파일ID'] || '',
+            details: Array.from({length:10}, (_, i) =>
+              data[`상세이미지${i+1} Drive 링크 또는 파일ID`] || ''),
             order: Number(data['정렬순서']) || 9999
           };
         })
