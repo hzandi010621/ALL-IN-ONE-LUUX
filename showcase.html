@@ -402,6 +402,20 @@
     }
     .error-state strong{display:block;color:#111;margin-bottom:7px}
 
+    .reload-cases{
+      margin-top:16px;
+      padding:10px 18px;
+      border:1px solid #111;
+      border-radius:999px;
+      background:#111;
+      color:#fff;
+      cursor:pointer;
+      font-size:12px;
+      font-weight:700;
+    }
+    .reload-cases:hover{background:#333}
+
+
     /* Detail modal */
     .case-modal{
       position:fixed;inset:0;z-index:200;
@@ -588,6 +602,8 @@
             <button class="filter-btn active" type="button" data-filter="ALL">ALL</button>
             <button class="filter-btn" type="button" data-filter="명품">명품</button>
             <button class="filter-btn" type="button" data-filter="패션·뷰티">패션·뷰티</button>
+            <button class="filter-btn" type="button" data-filter="생활·소비재">생활·소비재</button>
+            <button class="filter-btn" type="button" data-filter="건강·웰니스">건강·웰니스</button>
             <button class="filter-btn" type="button" data-filter="금융">금융</button>
             <button class="filter-btn" type="button" data-filter="자동차">자동차</button>
             <button class="filter-btn" type="button" data-filter="식음료">식음료</button>
@@ -886,79 +902,142 @@
         render();
       }
 
-      function showLoadError(){
-        grid.innerHTML = `
-          <div class="error-state">
-            <strong>데이터 연결 실패</strong>
-            공개된 Google Sheet 주소와 게시 상태를 확인해주세요.
-          </div>`;
+      // Google Visualization JSONP는 브라우저 CORS 제약 없이 조회 가능.
+      // Google 스프레드시트 '실제 ID'를 사용해야 함. 2PACX 웹 게시 ID는 사용 불가.
+      const SHEET_ID = '1vPeIgjr_jzzKKCNNaWwVH3i1Y2hhqLYSFEcyo0WPg7k';
+      const SHEET_GID = '1772571761';
+
+      let loadingNow = false;
+
+      function setLoadingState(){
+        grid.innerHTML = '<div class="loading-state">송출 사례를 불러오는 중입니다.</div>';
         message.textContent = '';
       }
 
-      // 1차: 공개 CSV 직접 호출
-      async function loadCsv(){
-        const response = await fetch(`${CSV_URL}&_=${Date.now()}`, {
-          cache:'no-store',
-          redirect:'follow'
-        });
+      function showLoadError(){
+        grid.innerHTML = `
+          <div class="error-state">
+            <strong>데이터를 불러오지 못했습니다.</strong>
+            <div>공개용 데이터 피드의 접근 승인 및 열람 권한을 확인해주세요.</div>
+            <button class="reload-cases" id="retryCases" type="button">다시 불러오기 ↻</button>
+          </div>`;
+        message.textContent = '';
+        document.getElementById('retryCases').addEventListener('click', loadData);
+      }
 
-        if(!response.ok) throw new Error(`HTTP ${response.status}`);
-
-        const text = await response.text();
-        const rows = parseCsv(text);
-
-        if(!rows.length || !rows[0].includes('노출여부')){
-          throw new Error('Unexpected CSV format');
+      // 공개 시트의 Visualization 응답을 표의 헤더/행으로 변환
+      function rowsFromGviz(payload){
+        if(!payload || payload.status === 'error') {
+          throw new Error('Google Visualization returned an error: ' +
+            JSON.stringify(payload && payload.errors || []));
+        }
+        const table = payload.table;
+        if(!table || !Array.isArray(table.cols) || !Array.isArray(table.rows)){
+          throw new Error('Google Visualization response format is invalid');
         }
 
-        setCases(normalizeRows(rows));
+        const headers = table.cols.map(col => String(col.label || '').trim());
+        const rows = [headers];
+
+        for(const r of table.rows){
+          rows.push(table.cols.map((_, i) => {
+            const cell = r.c && r.c[i];
+            if(!cell) return '';
+            // 원본 텍스트값(v)을 우선하여 파일 URL/숫자 손상 방지
+            if(cell.v !== undefined && cell.v !== null) return String(cell.v);
+            return (cell.f !== undefined && cell.f !== null) ? String(cell.f) : '';
+          }));
+        }
+
+        if(!rows[0].includes('노출여부')){
+          throw new Error('CMS header is missing in Google Visualization response');
+        }
+        return rows;
       }
 
-      // 2차 fallback: Google Visualization JSONP
-      function loadGvizFallback(){
-        const pubBase = CSV_URL.split('/pub?')[0];
-        const gidMatch = CSV_URL.match(/[?&]gid=([^&]+)/);
-        const gid = gidMatch ? gidMatch[1] : '0';
+      function loadGviz(){
+        return new Promise((resolve, reject) => {
+          const callback = '__luuxCMSv4Callback';
+          let finished = false;
+          let script;
+          const timer = setTimeout(() => done(new Error('Visualization request timed out')), 10000);
 
-        window.__luuxGvizCallback = function(payload){
-          try{
-            const table = payload && payload.table;
-            if(!table || !Array.isArray(table.cols) || !Array.isArray(table.rows)){
-              throw new Error('Invalid gviz response');
-            }
-
-            const headers = table.cols.map(col => col.label || '');
-            const rows = [headers];
-
-            table.rows.forEach(r => {
-              rows.push(table.cols.map((_, i) => {
-                const cell = r.c && r.c[i];
-                if(!cell) return '';
-                if(cell.f !== undefined && cell.f !== null) return String(cell.f);
-                if(cell.v !== undefined && cell.v !== null) return String(cell.v);
-                return '';
-              }));
-            });
-
-            setCases(normalizeRows(rows));
-          } catch(err){
-            console.error(err);
-            showLoadError();
-          } finally {
-            delete window.__luuxGvizCallback;
+          function done(err, data){
+            if(finished) return;
+            finished = true;
+            clearTimeout(timer);
+            delete window[callback];
+            if(script) script.remove();
+            if(err) reject(err);
+            else resolve(data);
           }
-        };
 
-        const script = document.createElement('script');
-        script.src = `${pubBase}/gviz/tq?gid=${encodeURIComponent(gid)}&tqx=responseHandler:__luuxGvizCallback&_=${Date.now()}`;
-        script.onerror = showLoadError;
-        document.body.appendChild(script);
+          window[callback] = (payload) => {
+            try { done(null, rowsFromGviz(payload)); }
+            catch(err) { done(err); }
+          };
+
+          const params = new URLSearchParams({
+            gid: SHEET_GID,
+            sheet: 'Public_Cases',
+            headers: '1',
+            tqx: `out:json;responseHandler:${callback}`,
+            _: String(Date.now())
+          });
+          script = document.createElement('script');
+          script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?${params.toString()}`;
+          script.onerror = () => done(new Error('Google Visualization script failed to load'));
+          document.head.appendChild(script);
+        });
       }
 
-      loadCsv().catch(err => {
-        console.warn('CSV fetch failed; trying gviz fallback.', err);
-        loadGvizFallback();
-      });
+      // CSV는 원본 공개 게시 URL 유지. 리디렉션과 CORS 때문에 보조 경로로만 사용.
+      async function loadCsv(){
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 10000);
+        try{
+          const response = await fetch(`${CSV_URL}&_=${Date.now()}`, {
+            method: 'GET',
+            cache: 'no-store',
+            redirect: 'follow',
+            signal: controller.signal
+          });
+          if(!response.ok) throw new Error(`CSV HTTP ${response.status}`);
+          const text = await response.text();
+          const rows = parseCsv(text);
+          if(!rows.length || !rows[0].some(x => x.trim() === '노출여부')){
+            throw new Error('CSV header missing (or CSV export returned an HTML page)');
+          }
+          return rows;
+        } finally{
+          clearTimeout(timer);
+        }
+      }
+
+      async function loadData(){
+        if(loadingNow) return;
+        loadingNow = true;
+        setLoadingState();
+
+        try {
+          // 주 경로: 올바른 /d/{시트ID}/gviz/tq JSONP
+          let rows;
+          try {
+            rows = await loadGviz();
+          } catch(e) {
+            console.warn('Google Visualization unavailable; trying published CSV.', e);
+            rows = await loadCsv();
+          }
+          setCases(normalizeRows(rows));
+        } catch(e) {
+          console.error('LUUX Showcase CMS load failed:', e);
+          showLoadError();
+        } finally {
+          loadingNow = false;
+        }
+      }
+
+      loadData();
     })();
   </script>
 </body>
