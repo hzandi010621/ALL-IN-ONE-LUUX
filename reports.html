@@ -26,7 +26,7 @@ html.auth-ok #authGate { display:none !important; }
     if (sessionStorage.getItem(window.__luuxAuthKey) === "verified") document.documentElement.classList.add("auth-ok");
   } catch (e) {}
 </script>
-</head><body id="top">
+<link rel="stylesheet" href="luux-mobile.css?v=m1"></head><body id="top">
 <div id="authGate" role="dialog" aria-modal="true" aria-labelledby="authTitle">
   <form class="auth-card" id="authForm" autocomplete="off">
     <div class="auth-badge" aria-hidden="true"><img src="report-luux-logo.png" alt=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="10" width="14" height="11" rx="1"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg></div>
@@ -74,4 +74,4 @@ html.auth-ok #authGate { display:none !important; }
   if (document.documentElement.classList.contains("auth-ok")) document.getElementById("authGate").setAttribute("aria-hidden", "true");
 })();
 </script>
-</body></html>
+<script src="luux-mobile.js?v=m1"></script></body></html>
