@@ -2,3 +2,6 @@ main{min-height:calc(100vh - 240px)}.facts{display:grid;grid-template-columns:re
 .picture{aspect-ratio:16/9}.picture img{object-fit:contain}.card:hover .picture img{transform:none}
 
 .report-title-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:14px 0 28px}.report-title-row #title{margin:0}.analysis-link{display:inline-flex;align-items:center;gap:12px;border:1px solid #d8d8d8;padding:10px 14px;border-radius:3px;font-size:12px;white-space:nowrap;transition:background .2s,border-color .2s}.analysis-link:hover{background:#f3f3f3;border-color:#999}.analysis-link span{font-size:17px;line-height:1}@media(max-width:560px){.report-title-row{gap:12px}.analysis-link{padding:8px 11px}}
+
+/* 제안서 페이지 다운로드 버튼과 같은 디자인 */
+.downloads{display:flex;gap:8px}.dl-btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border:1px solid #ddd;border-radius:2px;background:#fff;color:#171717;font-size:12px;font-weight:600;letter-spacing:.02em;transition:background .2s}.dl-btn svg{width:16px;height:16px;flex:none}.dl-btn:hover{background:#f3f4ee}@media(max-width:700px){.dl-btn{height:34px;padding:0 12px}}
