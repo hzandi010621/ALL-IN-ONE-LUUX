@@ -5,3 +5,21 @@ main{min-height:calc(100vh - 240px)}.facts{display:grid;grid-template-columns:re
 
 /* 제안서 페이지 다운로드 버튼과 같은 디자인 */
 .downloads{display:flex;gap:8px}.dl-btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border:1px solid #ddd;border-radius:2px;background:#fff;color:#171717;font-size:12px;font-weight:600;letter-spacing:.02em;transition:background .2s}.dl-btn svg{width:16px;height:16px;flex:none}.dl-btn:hover{background:#f3f4ee}@media(max-width:700px){.dl-btn{height:34px;padding:0 12px}}
+
+/* 모바일 상세: 보고서 장표를 먼저(목차 버튼은 기존 모양 그대로), 핵심 성과는 그 아래(기존 디자인), 다운로드·대시보드는 맨 아래로 */
+@media(max-width:700px){
+#detail .detail-content{display:flex;flex-direction:column}
+#detail .report-title-row,#detail .report-toolbar{display:contents}
+#detail #meta{order:1;margin-bottom:6px}
+#detail #title{order:2;margin:0 0 18px}
+#detail .report-toolbar nav{order:3;margin:0 0 12px}
+#detail .viewer{order:4}
+#detail .photo-info{order:5}
+#detail #thumbs{order:6}
+#detail .facts{order:7;margin-top:24px}
+/* 한국어 설명이 글자 중간에서 끊기지 않게 (띄어쓰기 단위 + 줄 길이 균형) */
+#detail .facts small,#detail .facts>div>span{word-break:keep-all;text-wrap:balance}
+#detail .downloads{order:8;margin-top:20px}
+#detail .downloads .dl-btn{flex:1;justify-content:center;height:44px}
+#detail .analysis-link{order:9;margin-top:8px;justify-content:center;height:44px;padding:0;border-radius:2px;border-color:#ddd}
+}
