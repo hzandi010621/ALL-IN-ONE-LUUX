@@ -24,23 +24,28 @@
   full.innerHTML = '<img class="fs-image" alt=""><button class="fs-close" type="button" aria-label="전체화면 닫기">×</button><button class="fs-prev" type="button" aria-label="이전 장">←</button><button class="fs-next" type="button" aria-label="다음 장">→</button><div class="fs-count" aria-live="polite"></div>';
   document.body.append(full);
   const image = full.querySelector('img');
+  const video = document.createElement('iframe');
+  video.className='fs-image';video.title='송출 영상 전체화면';video.allow='autoplay; fullscreen';video.allowFullscreen=true;video.style.border='0';video.hidden=true;full.append(video);
   function sync() {
+    const current=mediaFor(active)[index];
+    video.src='about:blank';video.hidden=current.type!=='video';image.hidden=current.type==='video';
+    if(current.type==='video')video.src=current.src;
     const photo = document.getElementById('photo');
     image.src = photo.src;
     image.alt = photo.alt;
     full.querySelector('.fs-count').textContent = document.getElementById('position').textContent;
   }
-  function step(delta) { move(delta); sync(); }
-  function close() { if (full.open) full.close(); }
+  function step(delta) { move(delta); stopVideo(); sync(); }
+  function close() { video.src='about:blank';if (full.open) full.close(); }
   trigger.addEventListener('click', () => {
-    sync(); full.showModal();
+    stopVideo();sync(); full.showModal();
     full.querySelector('.fs-close').focus();
   });
   full.querySelector('.fs-close').onclick = close;
   full.querySelector('.fs-prev').onclick = () => step(-1);
   full.querySelector('.fs-next').onclick = () => step(1);
   full.addEventListener('cancel', event => { event.preventDefault(); close(); });
-  full.addEventListener('close', () => { if(detail.open) trigger.focus(); });
+  full.addEventListener('close', () => { video.src='about:blank';if(detail.open){showPhoto();trigger.focus();} });
   detail.addEventListener('close', close);
   full.addEventListener('keydown', event => {
     if (['ArrowRight','ArrowDown','PageDown',' '].includes(event.key)) { event.preventDefault(); step(1); }
