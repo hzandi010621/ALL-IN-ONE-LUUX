@@ -25,5 +25,5 @@ const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.92));
 files[i]={name:`${p.title}_${String(i+1).padStart(2,'0')}.jpg`,data:new Uint8Array(await blob.arrayBuffer())};
 label.textContent=`준비 중 ${++done}/${p.images.length}`}));
 const a=document.createElement('a');a.href=URL.createObjectURL(zip(files));a.download=`LUUX_${p.title}.zip`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);
-label.textContent='전체 다운로드'}catch(err){label.textContent='다시 시도해주세요'}finally{busy=false;btn.removeAttribute('aria-busy')}})})();
+label.textContent='다운로드'}catch(err){label.textContent='다시 시도해주세요'}finally{busy=false;btn.removeAttribute('aria-busy')}})})();
 
