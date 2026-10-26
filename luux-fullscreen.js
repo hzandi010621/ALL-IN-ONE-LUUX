@@ -26,17 +26,19 @@
   const image = full.querySelector('img');
   const video = document.createElement('iframe');
   video.className='fs-image';video.title='송출 영상 전체화면';video.allow='autoplay; fullscreen';video.allowFullscreen=true;video.style.border='0';video.hidden=true;full.append(video);
+  const nativeFull=document.createElement('video');nativeFull.className='fs-image';nativeFull.controls=true;nativeFull.playsInline=true;nativeFull.preload='metadata';nativeFull.hidden=true;full.append(nativeFull);
+  function stopFullVideo(){video.src='about:blank';nativeFull.pause();nativeFull.removeAttribute('src');nativeFull.load();nativeFull.hidden=true;}
   function sync() {
     const current=mediaFor(active)[index];
-    video.src='about:blank';video.hidden=current.type!=='video';image.hidden=current.type==='video';
-    if(current.type==='video')video.src=current.src;
+    stopFullVideo();video.hidden=true;image.hidden=current.type==='video';
+    if(current.type==='video'){if(/\.mp4(?:$|[?#])/i.test(current.src)){nativeFull.src=current.src;nativeFull.poster=active.images[0].src;nativeFull.hidden=false;}else{video.hidden=false;video.src=current.src;}}
     const photo = document.getElementById('photo');
     image.src = photo.src;
     image.alt = photo.alt;
     full.querySelector('.fs-count').textContent = document.getElementById('position').textContent;
   }
   function step(delta) { move(delta); stopVideo(); sync(); }
-  function close() { video.src='about:blank';if (full.open) full.close(); }
+  function close() { stopFullVideo();if (full.open) full.close(); }
   trigger.addEventListener('click', () => {
     stopVideo();sync(); full.showModal();
     full.querySelector('.fs-close').focus();
@@ -45,9 +47,9 @@
   full.querySelector('.fs-prev').onclick = () => step(-1);
   full.querySelector('.fs-next').onclick = () => step(1);
   full.addEventListener('cancel', event => { event.preventDefault(); close(); });
-  full.addEventListener('close', () => { video.src='about:blank';if(detail.open){showPhoto();trigger.focus();} });
+  full.addEventListener('close', () => { stopFullVideo();if(detail.open){showPhoto();trigger.focus();} });
   detail.addEventListener('close', close);
-  full.addEventListener('keydown', event => {
+  full.addEventListener('keydown', event => {if(event.target.tagName==='VIDEO'){event.stopPropagation();return;}
     if (['ArrowRight','ArrowDown','PageDown',' '].includes(event.key)) { event.preventDefault(); step(1); }
     else if (['ArrowLeft','ArrowUp','PageUp'].includes(event.key)) { event.preventDefault(); step(-1); }
     event.stopPropagation();
