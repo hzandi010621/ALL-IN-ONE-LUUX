@@ -31,7 +31,7 @@
   function sync() {
     const current=mediaFor(active)[index];
     stopFullVideo();video.hidden=true;image.hidden=current.type==='video';
-    if(current.type==='video'){if(/\.mp4(?:$|[?#])/i.test(current.src)){nativeFull.src=current.src;nativeFull.poster=active.images[0].src;nativeFull.hidden=false;}else{video.hidden=false;video.src=current.src;}}
+    if(current.type==='video'){if(/\.mp4(?:$|[?#])/i.test(current.src)){nativeFull.src=current.src;nativeFull.poster=current.poster||active.images[0].src;nativeFull.hidden=false;}else{video.hidden=false;video.src=current.src;}}
     const photo = document.getElementById('photo');
     image.src = photo.src;
     image.alt = photo.alt;
