@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta name="luux-build" content="20261027-app-update1"><meta charset="UTF-8" />
+  <meta name="luux-build" content="20261027-mobile-home2"><meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="LUUX Business Intelligence — 룩스 제안서, 포트폴리오, 주요 이슈 캘린더, 경쟁매체 분석, 옥외광고 성과 보고서를 한 곳에서 확인하는 포털" />
   <title>LUUX Business Intelligence</title>
@@ -653,6 +653,37 @@
 
 .install-link{margin-left:auto;font-size:13px;color:#555;padding:12px 8px}
 @media(display-mode:standalone){.install-link{display:none}}
+/* Phone layout: compact header and readable cards without truncating content. */
+@media(max-width:600px){
+ html{scroll-padding-top:72px}
+ .shell{width:calc(100% - 32px)}
+ .nav{min-height:56px;gap:12px}.official-logo{width:88px}
+ .hero{padding:16px 0 0}
+ .hero-card{min-height:0;padding:24px 20px;border-radius:20px;background-position:55% center;box-shadow:none}
+ .eyebrow{font-size:10px;letter-spacing:.06em;gap:7px}.pulse{width:6px;height:6px;flex:none}
+ .hero h1{font-size:clamp(25px,7vw,30px);line-height:1.2;margin:20px 0 18px;letter-spacing:.01em}
+ .hero-copy{font-size:14px;line-height:1.65;word-break:keep-all;overflow-wrap:break-word;color:#e1e5e7}
+ .hero-copy .hero-break{margin-top:8px}
+ .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:22px}
+ .hero-actions a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:9px 6px;font-size:12px;line-height:1.4;text-align:center;word-break:keep-all;background:#07111a33}
+ .hero-actions a:first-child{grid-column:1/-1}
+ #tools{padding:30px 0 24px}.section-head{margin-bottom:16px;gap:12px}
+ #tools h2{font-size:25px;line-height:1.3;letter-spacing:-.04em}
+ .grid{gap:12px;grid-template-columns:1fr}
+ .tool-card{display:grid;grid-template-columns:36px minmax(0,1fr);column-gap:12px;row-gap:12px;min-height:0;padding:18px;border-radius:18px}
+ .tool-card .topline{grid-column:1/-1;gap:8px}
+ .num{font-size:11px}.tag{font-size:9px;letter-spacing:.02em;padding:4px 8px;line-height:1.5}
+ .tool-card .icon{grid-column:1;grid-row:2;width:36px;height:36px;margin:0;border-radius:10px}
+ .tool-card .icon svg{width:20px;height:20px}
+ .tool-card h3{grid-column:2;grid-row:2;align-self:center;margin:0;font-size:21px;line-height:1.3;letter-spacing:-.045em;word-break:keep-all}
+ .tool-card p{grid-column:1/-1;font-size:14px;line-height:1.65;word-break:keep-all;overflow-wrap:break-word}
+ .card-footer{grid-column:1/-1;margin:0;padding-top:0;align-items:center;gap:12px}
+ .hint{font-size:11px;line-height:1.5;word-break:keep-all}
+ .simple-footer{margin-top:8px;padding:18px 0 max(18px,env(safe-area-inset-bottom))}
+ .simple-footer .footer-row{gap:12px}.footer-logo{width:72px}.install-link{font-size:11px;padding:10px 0}
+}
+@media(max-width:360px){.tool-card h3{font-size:19px}.hero-card{padding:22px 18px}}
+@media(hover:none){.tool-card:hover{transform:none;box-shadow:none}.tool-card:hover .go{transform:none}}
 </style>
 <link rel="manifest" href="luux.webmanifest">
 <link rel="apple-touch-icon" href="luux-app-icon.png">
@@ -770,5 +801,5 @@ if (window.matchMedia('(display-mode: standalone)').matches || navigator.standal
  });
 
 }
-</script><script src="luux-viewer-controls.js?v=20261027-app-update1"></script><script src="luux-app-update.js?v=20261027-app-update1"></script></body>
+</script><script src="luux-viewer-controls.js?v=20261027-mobile-home2"></script><script src="luux-app-update.js?v=20261027-mobile-home2"></script></body>
 </html>
