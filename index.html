@@ -650,7 +650,16 @@
 @font-face{font-family:Aboreto;src:url('landing-Aboreto-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
 .hero-card{background:linear-gradient(90deg,rgba(8,20,29,.74),rgba(8,20,29,.42)),url('landing-donga-media-center.jpg') center 45%/cover no-repeat}.hero-card::before,.hero-card::after{display:none}
 .hero h1{font-family:Aboreto,serif;font-weight:400;font-size:clamp(28px,4.6vw,64px);letter-spacing:.015em;line-height:1.25;max-width:100%}
+
+.install-link{margin-left:auto;font-size:13px;color:#555;padding:12px 8px}
+@media(display-mode:standalone){.install-link{display:none}}
 </style>
+<link rel="manifest" href="luux.webmanifest">
+<link rel="apple-touch-icon" href="luux-app-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LUUX Hub">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f5f5f2">
 </head>
 
 <body>
@@ -696,7 +705,7 @@
     </section>
   </main>
 
-  <footer class="simple-footer"><div class="shell footer-row"><a href="#top" aria-label="LUUX 홈"><img src="portfolio-luux-logo.png" alt="LUUX" class="footer-logo"></a><a class="back-top" href="#top" aria-label="맨 위로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21V3m-5 5 5-5 5 5"/></svg></a></div></footer>
+  <footer class="simple-footer"><div class="shell footer-row"><a href="#top" aria-label="LUUX 홈"><img src="portfolio-luux-logo.png" alt="LUUX" class="footer-logo"></a><a class="install-link" href="install.html">아이폰에 설치 ↗</a><a class="back-top" href="#top" aria-label="맨 위로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21V3m-5 5 5-5 5 5"/></svg></a></div></footer>
 
   <script>
     (() => {
@@ -754,5 +763,12 @@
     })();
   </script>
 
-</body>
+<script>
+if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+ document.querySelectorAll('a[target="_blank"]').forEach(a => {
+  if (new URL(a.href).origin === location.origin) a.removeAttribute('target');
+ });
+ window.addEventListener('pageshow', e => { if(e.persisted) location.reload(); });
+}
+</script></body>
 </html>
