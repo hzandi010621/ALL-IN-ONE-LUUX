@@ -43,4 +43,6 @@ function slugFor(p){const base=t=>t.replace(/[\s()·\/,&]+/g,'-').replace(/^-+|-
 return projects.filter(q=>base(q.title)===s).length>1?s+'-'+p.date.slice(2).replace('.',''):s}
 function openFromHash(){const h=decodeURIComponent(location.hash.slice(1));if(!h)return;const p=projects.find(q=>slugFor(q)===h);if(p&&!(dialog.open&&active===p))openProject(p)}
 openFromHash();addEventListener('hashchange',openFromHash);
-document.querySelector('#shareCase')?.addEventListener('click',()=>{if(active)luuxShare({title:`LUUX 포트폴리오 · ${active.title}`,url:location.origin+location.pathname+'#'+slugFor(active)})});
+document.querySelector('#shareCase')?.addEventListener('click',()=>{if(active)luuxShare({title:`LUUX 포트폴리오 · ${active.title}`,url:luuxShareUrl('#'+slugFor(active))})});
+// 공유받은 링크에서는 상세를 닫을 수 없다(X·Esc·바깥 클릭)
+if(window.luuxShared){dialog.addEventListener('cancel',e=>e.preventDefault());dialog.close=()=>{}}

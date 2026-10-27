@@ -18,6 +18,18 @@ async function copy(text){
   (document.querySelector('dialog[open]')||document.body).append(t);t.select();
   let ok=false;try{ok=document.execCommand('copy')}catch(e){}t.remove();return ok;
 }
+// 공유받은 링크(?share=1)로 들어오면 이 페이지 밖으로 나가는 길을 막는다: 홈·로고 링크, 뒤로가기
+window.luuxShared=new URLSearchParams(location.search).has('share');
+if(luuxShared){
+  style.textContent+='.luux-shared header a.home,.luux-shared header a.nav,.luux-shared #close{display:none!important}.luux-shared header a{pointer-events:none;cursor:default}';
+  document.documentElement.classList.add('luux-shared');
+  const lock=()=>document.querySelectorAll('header a[href]').forEach(a=>{a.removeAttribute('href');a.setAttribute('aria-disabled','true');a.tabIndex=-1});
+  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',lock):lock();
+  history.pushState(null,'',location.href);
+  addEventListener('popstate',()=>history.pushState(null,'',location.href));
+}
+// 공유할 링크: 받은 사람도 같은 잠금 모드로 열리도록 share=1을 붙인다
+window.luuxShareUrl=(hash='')=>location.origin+location.pathname+'?share=1'+hash;
 window.luuxShare=async function({title,url}){
   const mobile=matchMedia('(pointer:coarse)').matches;
   if(mobile&&navigator.share){
