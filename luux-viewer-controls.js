@@ -43,6 +43,7 @@ html body #show .show-next,html body #luuxFullscreen .fs-next{right:max(12px,env
 html body .luux-vector-control:focus:not(:focus-visible){outline:none!important}
 html body .luux-vector-control:focus-visible{outline:2px solid #00b2ac!important;outline-offset:3px!important}
 @media(hover:hover){html body .luux-vector-control:hover{background:#eee!important}html body .luux-control-dark:hover{background:#333!important}}
+html body #showClose:focus,html body #luuxFullscreen .fs-close:focus,html body #detail .detail-head button[aria-label*="닫기"]:focus{outline:none!important;box-shadow:none!important}
 html body .luux-vector-control:active{opacity:.75!important}
 `;
   style.textContent += `
