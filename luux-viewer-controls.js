@@ -1,12 +1,14 @@
 /* Consistent vector controls, independent of font metrics and iOS button defaults. */
 (() => {
   const icons = {
+    external:'M6 18 18 6M6 6h12v12',
     prev:'M19 12H5m6-6-6 6 6 6',
     next:'M5 12h14m-6-6 6 6-6 6',
     up:'M12 19V5m-6 6 6-6 6 6',
     close:'m6 6 12 12M18 6 6 18'
   };
   const groups = [
+    ['.tool-card .go,.rows .row .arrow','external'],
     ['#showPrev,#luuxFullscreen .fs-prev,.viewer #prev','prev'],
     ['#showNext,#luuxFullscreen .fs-next,.viewer #next','next'],
     ['#showClose,#luuxFullscreen .fs-close,#detail .detail-head button[aria-label*="닫기"]','close'],
@@ -43,5 +45,14 @@ html body .luux-vector-control:focus-visible{outline:2px solid #00b2ac!important
 @media(hover:hover){html body .luux-vector-control:hover{background:#eee!important}html body .luux-control-dark:hover{background:#333!important}}
 html body .luux-vector-control:active{opacity:.75!important}
 `;
+  style.textContent += `
+html body .luux-inline-arrow{display:inline-block;vertical-align:middle;width:20px;height:20px;flex:none;stroke-width:1.8}
+html body .row{grid-template-columns:38px minmax(0,1fr) 44px}
+html body .nav span,html body .home span,html body .dashboard-link span{display:inline-flex;align-items:center}
+@media(max-width:560px){html body .row{grid-template-columns:23px minmax(0,1fr) 44px}}
+`;
+  document.querySelectorAll('.dl-btn svg,.tool-btn svg,#openFullscreen svg').forEach(svg=>{
+    svg.setAttribute('stroke-width','1.8');svg.setAttribute('stroke-linecap','round');svg.setAttribute('stroke-linejoin','round');
+  });
   document.head.append(style);
 })();
