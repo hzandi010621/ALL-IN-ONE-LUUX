@@ -3,3 +3,4 @@
 .nav{font-size:13px;letter-spacing:.14em;font-weight:600}.nav span{display:inline-block;margin-left:24px;font-size:19px;transition:transform .2s}.nav:hover span{transform:translate(2px,-2px)}
 
 .nav{display:inline-flex;align-items:center;gap:10px;line-height:1}.nav span{display:block;margin-left:0;font-size:18px;line-height:1;letter-spacing:0}
+@media(max-width:360px){h1{font-size:26vw}}
