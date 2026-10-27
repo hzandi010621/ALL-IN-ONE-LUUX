@@ -23,3 +23,9 @@ main{min-height:calc(100vh - 240px)}.facts{display:grid;grid-template-columns:re
 #detail .downloads .dl-btn{flex:1;justify-content:center;height:44px}
 #detail .analysis-link{order:9;margin-top:8px;justify-content:center;height:44px;padding:0;border-radius:2px;border-color:#ddd}
 }
+
+/* 공유 버튼은 목차 버튼이 아니라 다운로드 버튼 모양을 따른다 */
+.report-toolbar button.dl-btn{border:1px solid #ddd;background:#fff;color:#171717;padding:0 16px;border-radius:2px;font-size:12px;font-family:inherit;cursor:pointer}
+.report-toolbar button.dl-btn:hover{background:#f3f4ee}
+@media(max-width:700px){.report-toolbar button.dl-btn{padding:0 12px}}
+.dl-btn[aria-busy=true]{opacity:.6;cursor:progress}

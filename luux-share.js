@@ -1,4 +1,4 @@
-// 공유: 휴대폰은 기본 공유 창, PC는 링크 복사 후 "링크 복사됨" 안내
+// 공유: 링크를 복사하고(휴대폰은 기본 공유 창도 띄움) 화면 아래에 "링크가 복사되었습니다" 안내
 (()=>{
 const style=document.createElement('style');
 style.textContent='.luux-toast{position:fixed;left:50%;bottom:calc(32px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);z-index:2147483647;padding:10px 16px;border-radius:2px;background:#171717;color:#fff;font:600 12px/1.4 Arial,"Apple SD Gothic Neo",sans-serif;letter-spacing:.02em;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}.luux-toast.show{opacity:1;transform:translate(-50%,0)}';
@@ -10,7 +10,7 @@ function showToast(text){
   if(!toast)toast=document.createElement('div'),toast.className='luux-toast',toast.setAttribute('role','status');
   if(toast.parentNode!==host)host.append(toast);
   toast.textContent=text;requestAnimationFrame(()=>toast.classList.add('show'));
-  clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),1800);
+  clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),2200);
 }
 async function copy(text){
   try{await navigator.clipboard.writeText(text);return true}catch(e){}
@@ -31,10 +31,9 @@ if(luuxShared){
 // 공유할 링크: 받은 사람도 같은 잠금 모드로 열리도록 share=1을 붙인다
 window.luuxShareUrl=(hash='')=>location.origin+location.pathname+'?share=1'+hash;
 window.luuxShare=async function({title,url}){
-  const mobile=matchMedia('(pointer:coarse)').matches;
-  if(mobile&&navigator.share){
-    try{await navigator.share({title,url});return}catch(e){if(e.name==='AbortError')return}
-  }
-  showToast(await copy(url)?'링크 복사됨':'링크를 복사하지 못했습니다');
+  // 복사는 누른 순간 바로 시작하고, 휴대폰은 이어서 기본 공유 창을 띄운다. 끝나면 아래에 복사 안내를 보여준다
+  const copying=copy(url);
+  if(matchMedia('(pointer:coarse)').matches&&navigator.share){try{await navigator.share({title,url})}catch(e){}}
+  showToast(await copying?'링크가 복사되었습니다':'링크를 복사하지 못했습니다');
 };
 })();

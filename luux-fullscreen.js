@@ -27,9 +27,12 @@
   const video = document.createElement('iframe');
   video.className='fs-image';video.title='송출 영상 전체화면';video.allow='autoplay; fullscreen';video.allowFullscreen=true;video.style.border='0';video.hidden=true;full.append(video);
   const nativeFull=document.createElement('video');nativeFull.className='fs-image';nativeFull.controls=true;nativeFull.playsInline=true;nativeFull.preload='metadata';nativeFull.hidden=true;full.append(nativeFull);
+  // 영상 함수(mediaFor·stopVideo)는 포트폴리오에만 있다. 성과 보고처럼 사진만 있는 페이지에서도 동작하게 한다
+  const mediaItems=()=>typeof mediaFor==='function'?mediaFor(active):active.images;
+  const stopDetailVideo=()=>{if(typeof stopVideo==='function')stopVideo()};
   function stopFullVideo(){video.src='about:blank';nativeFull.pause();nativeFull.removeAttribute('src');nativeFull.load();nativeFull.hidden=true;}
   function sync() {
-    const current=mediaFor(active)[index];
+    const current=mediaItems()[index];
     stopFullVideo();video.hidden=true;image.hidden=current.type==='video';
     if(current.type==='video'){if(/\.mp4(?:$|[?#])/i.test(current.src)){nativeFull.src=current.src;nativeFull.poster=current.poster||active.images[0].src;nativeFull.hidden=false;}else{video.hidden=false;video.src=current.src;}}
     const photo = document.getElementById('photo');
@@ -37,10 +40,10 @@
     image.alt = photo.alt;
     full.querySelector('.fs-count').textContent = document.getElementById('position').textContent;
   }
-  function step(delta) { move(delta); stopVideo(); sync(); }
+  function step(delta) { move(delta); stopDetailVideo(); sync(); }
   function close() { stopFullVideo();if (full.open) full.close(); }
   trigger.addEventListener('click', () => {
-    stopVideo();sync(); full.showModal();
+    stopDetailVideo();sync(); full.showModal();
     full.querySelector('.fs-close').focus();
   });
   full.querySelector('.fs-close').onclick = close;
