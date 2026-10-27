@@ -3,7 +3,7 @@
 const style=document.createElement('style');
 style.textContent='.luux-toast{position:fixed;left:50%;bottom:calc(32px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);z-index:2147483647;padding:10px 16px;border-radius:2px;background:#171717;color:#fff;font:600 12px/1.4 Arial,"Apple SD Gothic Neo",sans-serif;letter-spacing:.02em;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}.luux-toast.luux-toast-on{opacity:1;transform:translate(-50%,0)}';
 // 전체화면·다운로드·공유 버튼은 가장 넓은 버튼에 맞춰 같은 크기로 보인다
-style.textContent+='.fullscreen-actions,.viewer-tools,#detail .downloads{display:inline-grid!important;grid-auto-flow:column;grid-auto-columns:1fr;align-items:stretch}.fullscreen-actions>*,.viewer-tools>*,#detail .downloads>*{justify-content:center;margin:0}@media(max-width:700px){#detail .downloads{display:grid!important;width:100%}.fullscreen-actions>.dl-btn{height:44px}}';
+style.textContent+='.fullscreen-actions,.viewer-tools,#detail .downloads{display:inline-grid!important;grid-auto-flow:column;grid-auto-columns:1fr;align-items:stretch}.fullscreen-actions>*,.viewer-tools>*,#detail .downloads>*{justify-content:center;margin:0}@media(max-width:700px){.fullscreen-actions>*,.viewer-tools>*,#detail .downloads>*{height:38px!important;padding:0 12px!important;font-size:12px!important;gap:6px!important;flex:none!important}.fullscreen-actions svg,.viewer-tools svg,#detail .downloads svg{width:15px!important;height:15px!important}}';
 document.head.append(style);
 let toast,timer;
 function showToast(text){

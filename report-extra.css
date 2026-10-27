@@ -21,7 +21,7 @@ main{min-height:calc(100vh - 240px)}.facts{display:grid;grid-template-columns:re
 #detail .facts small,#detail .facts>div>span{word-break:keep-all;text-wrap:balance}
 #detail .downloads{order:8;margin-top:20px}
 #detail .downloads .dl-btn{flex:1;justify-content:center;height:44px}
-#detail .analysis-link{order:9;margin-top:8px;justify-content:center;height:44px;padding:0;border-radius:2px;border-color:#ddd}
+#detail .analysis-link{order:9;margin-top:8px;justify-content:center;height:38px;padding:0;border-radius:2px;border-color:#ddd}
 }
 
 /* 공유 버튼은 목차 버튼이 아니라 다운로드 버튼 모양을 따른다 */
