@@ -13,7 +13,7 @@ function openProject(p){stopVideo();active=p;index=0;document.querySelector('#ti
 function showPhoto(){const items=mediaFor(active),im=items[index],photo=document.querySelector('#photo');stopVideo();photo.hidden=im.type==='video';if(im.type==='video'){if(/\.mp4(?:$|[?#])/i.test(im.src)){nativeVideo.setAttribute('aria-label',active.title+' 송출 영상');nativeVideo.poster=im.poster||active.images[0].src;nativeVideo.src=im.src;nativeVideo.hidden=false;}else{videoFrame.title=active.title+' 송출 영상';videoFrame.src=im.src;videoFrame.hidden=false;}}else{photo.src=im.src;photo.alt=active.title+' 사진 '+(index+1);}document.querySelector('#position').textContent=String(index+1).padStart(2,'0')+' / '+String(items.length).padStart(2,'0');document.querySelectorAll('#thumbs button').forEach((b,i)=>{b.classList.toggle('active',i===index);b.setAttribute('aria-pressed',String(i===index))});}
 function move(n){index=(index+n+mediaFor(active).length)%mediaFor(active).length;showPhoto()}
 document.querySelector('#prev').onclick=()=>move(-1);document.querySelector('#next').onclick=()=>move(1);document.querySelector('#close').onclick=()=>dialog.close();dialog.onclose=()=>{stopVideo();document.body.style.overflow=''};dialog.addEventListener('keydown',e=>{if(e.target.tagName==='VIDEO')return;if(e.key==='ArrowRight')move(1);if(e.key==='ArrowLeft')move(-1)});dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});render();
-// 전체 다운로드: 이 사례의 사진을 JPG로 바꿔 ZIP 하나로 저장
+// 전체 다운로드: 이 사례의 사진(JPG 변환)과 영상(MP4)을 ZIP 하나로 저장
 (()=>{const btn=document.querySelector('#download'),label=document.querySelector('#downloadLabel');if(!btn)return;
 const crcTable=new Uint32Array(256).map((_,n)=>{let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;return c>>>0});
 const crc32=b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=crcTable[(c^b[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0};
@@ -27,12 +27,14 @@ const cdSize=central.reduce((n,p)=>n+p.byteLength,0),e=new DataView(new ArrayBuf
 return new Blob([...parts,...central,e],{type:'application/zip'})}
 let busy=false;
 btn.addEventListener('click',async e=>{e.preventDefault();if(busy||!active)return;busy=true;btn.setAttribute('aria-busy','true');
-const p=active,files=[];let done=0;label.textContent=`준비 중 0/${p.images.length}`;
-try{await Promise.all(p.images.map(async(im,i)=>{const bmp=await createImageBitmap(await (await fetch(im.src)).blob());
+const p=active,files=[],videos=p.videos||[],total=p.images.length+videos.length;let done=0;label.textContent=`준비 중 0/${total}`;
+try{await Promise.all([...p.images.map(async(im,i)=>{const bmp=await createImageBitmap(await (await fetch(im.src)).blob());
 const cv=document.createElement('canvas');cv.width=bmp.width;cv.height=bmp.height;cv.getContext('2d').drawImage(bmp,0,0);
 const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.92));
 files[i]={name:`${p.title}_${String(i+1).padStart(2,'0')}.jpg`,data:new Uint8Array(await blob.arrayBuffer())};
-label.textContent=`준비 중 ${++done}/${p.images.length}`}));
+label.textContent=`준비 중 ${++done}/${total}`}),...videos.map(async(v,i)=>{const r=await fetch(v.src);if(!r.ok)throw new Error(v.src);
+files[p.images.length+i]={name:`${p.title}_영상${videos.length>1?'_'+String(i+1).padStart(2,'0'):''}.mp4`,data:new Uint8Array(await r.arrayBuffer())};
+label.textContent=`준비 중 ${++done}/${total}`})]);
 const a=document.createElement('a');a.href=URL.createObjectURL(zip(files));a.download=`LUUX_${p.title}.zip`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);
 label.textContent='다운로드'}catch(err){label.textContent='다시 시도해주세요'}finally{busy=false;btn.removeAttribute('aria-busy')}})})();
 
