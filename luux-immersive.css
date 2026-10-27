@@ -1,0 +1,13 @@
+/* Full-viewport media with aspect ratio preserved in either orientation. */
+#show,html #luuxFullscreen{width:100%;max-width:100%;height:100vh;height:100dvh;max-height:100dvh;overflow:hidden}
+#show img,#show video,html #luuxFullscreen .fs-image{
+ inset:0;width:100%;height:100%;max-width:none;max-height:none;
+ object-fit:contain;object-position:center;box-sizing:border-box;
+ padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);
+}
+#show button,html #luuxFullscreen button{z-index:2;background:#0d0d0d99;opacity:1;border-radius:50%}
+#show .show-close,html #luuxFullscreen .fs-close{top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right))}
+#show .show-prev,html #luuxFullscreen .fs-prev{left:max(8px,env(safe-area-inset-left))}
+#show .show-next,html #luuxFullscreen .fs-next{right:max(8px,env(safe-area-inset-right))}
+#show .show-bar,html #luuxFullscreen .fs-count{z-index:2;pointer-events:none;left:50%;right:auto;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:auto;height:auto;margin:0;padding:6px 12px;background:#0d0d0d99;border-radius:20px;color:#eee}
+#show .rotate-hint{display:none}
