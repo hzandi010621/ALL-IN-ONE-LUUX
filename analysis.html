@@ -12,31 +12,49 @@ main{min-height:calc(100vh - 240px)}
 @media(max-width:900px){.row{grid-template-columns:27px minmax(0,1fr) 30px;padding:27px 5%}.row .name{font-size:4.3vw}}
 @media(max-width:560px){.row{grid-template-columns:23px minmax(0,1fr) 24px;padding:23px 5%}.row .name{font-size:24px;letter-spacing:-1.2px}.row .arrow{font-size:25px}}
 </style><link rel="stylesheet" href="luux-mobile.css?v=20261027-share-label"><style id="luuxAuthStyle">
-html:not(.luux-auth-ok) body > :not(#luuxAuthGate):not(script){display:none!important}
-html.luux-auth-ok #luuxAuthGate{display:none!important}
-html:not(.luux-auth-ok) body{margin:0;background:#f5f5f2}
-#luuxAuthGate{box-sizing:border-box;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:32px 20px;color:#171717;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;letter-spacing:-.025em}
-#luuxAuthGate *{box-sizing:border-box}
-.luux-auth-card{width:100%;max-width:480px;padding:38px 34px;background:#fff;border:1px solid #deded8;border-radius:22px;box-shadow:0 18px 60px #00000008}
-.luux-auth-logo{display:block;width:92px;height:auto;filter:brightness(0);margin-bottom:38px}
-.luux-auth-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;color:#777;margin-bottom:12px}
-#luuxAuthTitle{margin:0;font-size:30px;line-height:1.3;font-weight:700;letter-spacing:-.055em;word-break:keep-all}
-.luux-auth-desc{margin:16px 0 28px;font-size:14px;line-height:1.7;color:#707070;word-break:keep-all}
-.luux-auth-label{display:block;font-size:12px;font-weight:600;margin-bottom:9px}
-.luux-auth-input-wrap{position:relative}
-#luuxAuthPassword{display:block;width:100%;height:50px;border:1px solid #d8d8d8;border-radius:10px;background:#fff;color:#171717;padding:0 64px 0 14px;font:inherit;font-size:15px;outline:none}
-#luuxAuthPassword:focus{border-color:#00a6a0;box-shadow:0 0 0 3px #00b2ac16}
-#luuxAuthPassword[aria-invalid="true"]{border-color:#b42318}
-#luuxAuthToggle{position:absolute;right:8px;top:8px;height:34px;min-width:44px;padding:0 8px;border:0;border-radius:6px;background:#f5f5f2;color:#555;font:inherit;font-size:11px;cursor:pointer}
-#luuxAuthSubmit{width:100%;height:50px;margin-top:14px;border:0;border-radius:10px;background:#171717;color:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
-#luuxAuthSubmit:hover{background:#333}#luuxAuthSubmit:disabled{opacity:.6;cursor:wait}
-#luuxAuthError{min-height:20px;margin-top:9px;font-size:12px;color:#b42318;line-height:1.6}
-.luux-auth-foot{margin:20px 0 0;padding-top:18px;border-top:1px solid #eee;color:#888;font-size:11px;line-height:1.8;word-break:keep-all}
-.luux-auth-home{display:inline-block;margin-top:18px;color:#555;font-size:12px;text-decoration:none}.luux-auth-home:hover{text-decoration:underline}
-@media(max-width:520px){.luux-auth-card{padding:28px 23px;border-radius:18px}.luux-auth-logo{margin-bottom:28px}#luuxAuthTitle{font-size:26px}}
+  html:not(.luux-auth-ok) body > *:not(#luuxAuthGate):not(script) { display:none !important; }
+  html.luux-auth-ok #luuxAuthGate { display:none !important; }
+  html:not(.luux-auth-ok), html:not(.luux-auth-ok) body { min-height:100%; }
+  html:not(.luux-auth-ok) body { margin:0; background:#F7F8FA; }
+  #luuxAuthGate{
+    min-height:100vh; min-height:100dvh; display:flex; align-items:center; justify-content:center;
+    padding:24px; background:
+      radial-gradient(circle at 15% 10%, rgba(43,76,126,.10), transparent 32%),
+      radial-gradient(circle at 90% 85%, rgba(30,58,95,.08), transparent 30%),
+      #F7F8FA;
+    font-family:Pretendard,"Pretendard Variable",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    color:#111827;
+  }
+  .luux-auth-card{
+    width:min(430px,100%); background:#fff; border:1px solid #E5E7EB; border-radius:16px;
+    padding:34px 34px 30px; box-shadow:0 18px 55px rgba(17,24,39,.10);
+  }
+  .luux-auth-eyebrow{font-size:11px;font-weight:800;letter-spacing:.13em;color:#2B4C7E;text-transform:uppercase;margin-bottom:10px}
+  .luux-auth-card h1{margin:0;font-size:27px;line-height:1.25;letter-spacing:-.025em;font-weight:800}
+  .luux-auth-desc{margin:9px 0 24px;color:#6B7280;font-size:13px;line-height:1.55}
+  .luux-auth-label{display:block;margin-bottom:7px;font-size:12px;font-weight:700;color:#374151}
+  .luux-auth-input-wrap{position:relative}
+  #luuxAuthPassword{
+    width:100%; height:46px; box-sizing:border-box; border:1px solid #D1D5DB; border-radius:9px;
+    padding:0 44px 0 13px; font:inherit; font-size:14px; outline:none; background:#fff; color:#111827;
+    transition:border-color .15s,box-shadow .15s;
+  }
+  #luuxAuthPassword:focus{border-color:#2B4C7E;box-shadow:0 0 0 3px rgba(30,58,95,.14)}
+  #luuxAuthPassword[aria-invalid="true"]{border-color:#B42318;box-shadow:0 0 0 3px rgba(180,35,24,.10)}
+  #luuxAuthToggle{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:7px;background:transparent;color:#6B7280;cursor:pointer;font-size:11px;font-weight:700}
+  #luuxAuthToggle:hover{background:#F3F4F6;color:#111827}
+  #luuxAuthSubmit{
+    width:100%;height:44px;margin-top:12px;border:0;border-radius:9px;background:#1E3A5F;color:#fff;
+    font:inherit;font-size:13.5px;font-weight:800;cursor:pointer;transition:background .15s,transform .08s;
+  }
+  #luuxAuthSubmit:hover{background:#2B4C7E}#luuxAuthSubmit:active{transform:translateY(1px)}
+  #luuxAuthSubmit:disabled{opacity:.6;cursor:default}
+  #luuxAuthError{min-height:19px;margin-top:9px;font-size:12px;color:#B42318;font-weight:600}
+  .luux-auth-foot{margin-top:20px;padding-top:16px;border-top:1px solid #F0F1F3;font-size:11.5px;color:#9CA3AF;line-height:1.5}
+  @media (max-width:520px){.luux-auth-card{padding:28px 22px 24px;border-radius:13px}.luux-auth-card h1{font-size:24px}}
 </style><script id="luuxAuthPrecheck">
 (()=>{try{const prefix="luuxProtectedTab:";let tab=window.name.startsWith(prefix)?window.name.slice(prefix.length):"";if(!tab){tab=crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random().toString(36).slice(2);window.name=prefix+tab}window.__luuxAuthKey="luuxAuth:"+location.pathname+":"+tab;if(sessionStorage.getItem(window.__luuxAuthKey)==="verified")document.documentElement.classList.add("luux-auth-ok")}catch(e){}})();
-</script></head><body id="top"><div id="luuxAuthGate" role="dialog" aria-modal="true" aria-labelledby="luuxAuthTitle"><form class="luux-auth-card" id="luuxAuthForm"><img class="luux-auth-logo" src="report-luux-logo.png" alt="LUUX"><div class="luux-auth-eyebrow">COMPETITIVE INTELLIGENCE</div><h1 id="luuxAuthTitle">경쟁매체 분석</h1><p class="luux-auth-desc">경쟁매체 집행 현황과 광고주·업종별 동향을 확인하세요. 비밀번호를 입력하면 분석 자료를 열람할 수 있습니다.</p><label class="luux-auth-label" for="luuxAuthPassword">비밀번호</label><div class="luux-auth-input-wrap"><input id="luuxAuthPassword" type="password" autocomplete="current-password" placeholder="비밀번호 입력" aria-describedby="luuxAuthError" autofocus><button id="luuxAuthToggle" type="button" aria-label="비밀번호 표시">보기</button></div><button id="luuxAuthSubmit" type="submit">접속하기</button><div id="luuxAuthError" role="alert" aria-live="polite"></div><p class="luux-auth-foot">새로고침 시에는 인증이 유지됩니다.<br>탭을 닫은 뒤 다시 접속하면 비밀번호를 다시 입력해야 합니다.</p><a class="luux-auth-home" href="index.html">← 홈으로 돌아가기</a></form></div>
+</script></head><body id="top"><div id="luuxAuthGate" role="dialog" aria-modal="true" aria-labelledby="luuxAuthTitle"><form class="luux-auth-card" id="luuxAuthForm"><div class="luux-auth-eyebrow">AUTHORIZED ACCESS</div><h1 id="luuxAuthTitle">경쟁매체 분석</h1><p class="luux-auth-desc">경쟁매체 집행 현황과 광고주·업종별 동향을 확인하세요. 비밀번호를 입력하면 분석 자료를 열람할 수 있습니다.</p><label class="luux-auth-label" for="luuxAuthPassword">Password</label><div class="luux-auth-input-wrap"><input id="luuxAuthPassword" type="password" autocomplete="current-password" placeholder="비밀번호 입력" aria-describedby="luuxAuthError" autofocus><button class="auth-toggle" id="luuxAuthToggle" type="button" aria-label="비밀번호 표시">보기</button></div><button id="luuxAuthSubmit" type="submit">접속하기</button><div id="luuxAuthError" role="alert" aria-live="polite"></div><p class="luux-auth-foot">새로고침 시에는 인증이 유지됩니다.<br>탭을 닫은 뒤 다시 접속하면 비밀번호를 다시 입력해야 합니다.</p></form></div>
 <header><a href="index.html" aria-label="LUUX 홈"><img src="report-luux-logo.png" alt="LUUX"></a><a class="nav" href="index.html" aria-label="홈화면으로 돌아가기">HOME <span><svg class="luux-inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a></header>
 <main><h1>analysis<span class="dot">.</span></h1>
 <section class="rows" aria-label="경쟁매체 분석">
