@@ -11,7 +11,32 @@
 main{min-height:calc(100vh - 240px)}
 @media(max-width:900px){.row{grid-template-columns:27px minmax(0,1fr) 30px;padding:27px 5%}.row .name{font-size:4.3vw}}
 @media(max-width:560px){.row{grid-template-columns:23px minmax(0,1fr) 24px;padding:23px 5%}.row .name{font-size:24px;letter-spacing:-1.2px}.row .arrow{font-size:25px}}
-</style><link rel="stylesheet" href="luux-mobile.css?v=20261027-share-label"></head><body id="top">
+</style><link rel="stylesheet" href="luux-mobile.css?v=20261027-share-label"><style id="luuxAuthStyle">
+html:not(.luux-auth-ok) body > :not(#luuxAuthGate):not(script){display:none!important}
+html.luux-auth-ok #luuxAuthGate{display:none!important}
+html:not(.luux-auth-ok) body{margin:0;background:#f5f5f2}
+#luuxAuthGate{box-sizing:border-box;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:32px 20px;color:#171717;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;letter-spacing:-.025em}
+#luuxAuthGate *{box-sizing:border-box}
+.luux-auth-card{width:100%;max-width:480px;padding:38px 34px;background:#fff;border:1px solid #deded8;border-radius:22px;box-shadow:0 18px 60px #00000008}
+.luux-auth-logo{display:block;width:92px;height:auto;filter:brightness(0);margin-bottom:38px}
+.luux-auth-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;color:#777;margin-bottom:12px}
+#luuxAuthTitle{margin:0;font-size:30px;line-height:1.3;font-weight:700;letter-spacing:-.055em;word-break:keep-all}
+.luux-auth-desc{margin:16px 0 28px;font-size:14px;line-height:1.7;color:#707070;word-break:keep-all}
+.luux-auth-label{display:block;font-size:12px;font-weight:600;margin-bottom:9px}
+.luux-auth-input-wrap{position:relative}
+#luuxAuthPassword{display:block;width:100%;height:50px;border:1px solid #d8d8d8;border-radius:10px;background:#fff;color:#171717;padding:0 64px 0 14px;font:inherit;font-size:15px;outline:none}
+#luuxAuthPassword:focus{border-color:#00a6a0;box-shadow:0 0 0 3px #00b2ac16}
+#luuxAuthPassword[aria-invalid="true"]{border-color:#b42318}
+#luuxAuthToggle{position:absolute;right:8px;top:8px;height:34px;min-width:44px;padding:0 8px;border:0;border-radius:6px;background:#f5f5f2;color:#555;font:inherit;font-size:11px;cursor:pointer}
+#luuxAuthSubmit{width:100%;height:50px;margin-top:14px;border:0;border-radius:10px;background:#171717;color:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+#luuxAuthSubmit:hover{background:#333}#luuxAuthSubmit:disabled{opacity:.6;cursor:wait}
+#luuxAuthError{min-height:20px;margin-top:9px;font-size:12px;color:#b42318;line-height:1.6}
+.luux-auth-foot{margin:20px 0 0;padding-top:18px;border-top:1px solid #eee;color:#888;font-size:11px;line-height:1.8;word-break:keep-all}
+.luux-auth-home{display:inline-block;margin-top:18px;color:#555;font-size:12px;text-decoration:none}.luux-auth-home:hover{text-decoration:underline}
+@media(max-width:520px){.luux-auth-card{padding:28px 23px;border-radius:18px}.luux-auth-logo{margin-bottom:28px}#luuxAuthTitle{font-size:26px}}
+</style><script id="luuxAuthPrecheck">
+(()=>{try{const prefix="luuxProtectedTab:";let tab=window.name.startsWith(prefix)?window.name.slice(prefix.length):"";if(!tab){tab=crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random().toString(36).slice(2);window.name=prefix+tab}window.__luuxAuthKey="luuxAuth:"+location.pathname+":"+tab;if(sessionStorage.getItem(window.__luuxAuthKey)==="verified")document.documentElement.classList.add("luux-auth-ok")}catch(e){}})();
+</script></head><body id="top"><div id="luuxAuthGate" role="dialog" aria-modal="true" aria-labelledby="luuxAuthTitle"><form class="luux-auth-card" id="luuxAuthForm"><img class="luux-auth-logo" src="report-luux-logo.png" alt="LUUX"><div class="luux-auth-eyebrow">COMPETITIVE INTELLIGENCE</div><h1 id="luuxAuthTitle">경쟁매체 분석</h1><p class="luux-auth-desc">경쟁매체 집행 현황과 광고주·업종별 동향을 확인하세요. 비밀번호를 입력하면 분석 자료를 열람할 수 있습니다.</p><label class="luux-auth-label" for="luuxAuthPassword">비밀번호</label><div class="luux-auth-input-wrap"><input id="luuxAuthPassword" type="password" autocomplete="current-password" placeholder="비밀번호 입력" aria-describedby="luuxAuthError" autofocus><button id="luuxAuthToggle" type="button" aria-label="비밀번호 표시">보기</button></div><button id="luuxAuthSubmit" type="submit">접속하기</button><div id="luuxAuthError" role="alert" aria-live="polite"></div><p class="luux-auth-foot">새로고침 시에는 인증이 유지됩니다.<br>탭을 닫은 뒤 다시 접속하면 비밀번호를 다시 입력해야 합니다.</p><a class="luux-auth-home" href="index.html">← 홈으로 돌아가기</a></form></div>
 <header><a href="index.html" aria-label="LUUX 홈"><img src="report-luux-logo.png" alt="LUUX"></a><a class="nav" href="index.html" aria-label="홈화면으로 돌아가기">HOME <span><svg class="luux-inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a></header>
 <main><h1>analysis<span class="dot">.</span></h1>
 <section class="rows" aria-label="경쟁매체 분석">
@@ -19,4 +44,80 @@ main{min-height:calc(100vh - 240px)}
 <a class="row" href="https://docs.google.com/spreadsheets/d/1f9oOcPBEnCJJtgrz8dnQWplMBdsrtl6jZEp_SLy5wGw/edit?usp=sharing" target="_blank" rel="noopener noreferrer"><span class="number">02</span><span class="name">경쟁매체 대시보드</span><span class="arrow" aria-hidden="true"><svg class="luux-inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
 </section></main>
 <footer><img src="report-luux-logo.png" alt="LUUX"><a href="#top" aria-label="맨 위로"><svg class="luux-inline-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></a></footer>
-<script src="luux-viewer-controls.js?v=20261027-share-label"></script><script src="luux-share.js?v=20261027-share-label"></script><script src="luux-app-update.js?v=20261027-share-label"></script></body></html>
+<script src="luux-viewer-controls.js?v=20261027-share-label"></script><script src="luux-share.js?v=20261027-share-label"></script><script src="luux-app-update.js?v=20261027-share-label"></script><script id="luuxAuthScript">
+(() => {
+  const AUTH_HASH = "576077e8597c153464386486162997be28ff4cd6c15f91baa25705051c83cf48";
+  const form = document.getElementById("luuxAuthForm");
+  if (!form) return;
+
+  const input = document.getElementById("luuxAuthPassword");
+  const error = document.getElementById("luuxAuthError");
+  const submit = document.getElementById("luuxAuthSubmit");
+  const toggle = document.getElementById("luuxAuthToggle");
+
+  const toHex = buffer => Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, "0")).join("");
+  async function sha256(text) {
+    const data = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest("SHA-256", data);
+    return toHex(digest);
+  }
+
+  function unlock() {
+    try {
+      const key = window.__luuxAuthKey;
+      if (key) sessionStorage.setItem(key, "verified");
+    } catch (e) {}
+    document.documentElement.classList.add("luux-auth-ok");
+    document.getElementById("luuxAuthGate").setAttribute("aria-hidden", "true");
+    const heading = document.querySelector("main h1");
+    if (heading) { heading.setAttribute("tabindex", "-1"); heading.focus(); }
+    input.value = "";
+    error.textContent = "";
+  }
+
+  toggle.addEventListener("click", () => {
+    const showing = input.type === "text";
+    input.type = showing ? "password" : "text";
+    toggle.textContent = showing ? "보기" : "숨김";
+    toggle.setAttribute("aria-label", showing ? "비밀번호 표시" : "비밀번호 숨기기");
+    input.focus();
+  });
+
+  input.addEventListener("input", () => {
+    input.removeAttribute("aria-invalid");
+    error.textContent = "";
+  });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!input.value) {
+      input.setAttribute("aria-invalid", "true");
+      error.textContent = "비밀번호를 입력해주세요.";
+      input.focus();
+      return;
+    }
+    submit.disabled = true;
+    submit.textContent = "확인 중…";
+    try {
+      const hash = await sha256(input.value);
+      if (hash === AUTH_HASH) {
+        unlock();
+      } else {
+        input.setAttribute("aria-invalid", "true");
+        error.textContent = "비밀번호가 올바르지 않습니다.";
+        input.select();
+      }
+    } catch (e) {
+      error.textContent = "이 브라우저에서는 인증 기능을 사용할 수 없습니다.";
+    } finally {
+      submit.disabled = false;
+      submit.textContent = "접속하기";
+    }
+  });
+
+  if (document.documentElement.classList.contains("luux-auth-ok")) {
+    const gate = document.getElementById("luuxAuthGate");
+    if (gate) gate.setAttribute("aria-hidden", "true");
+  }
+})();
+</script></body></html>
