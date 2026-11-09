@@ -2,3 +2,10 @@ body{background:#fff;color:#171717}header img,footer img{filter:brightness(0)}.d
 /* 전체 다운로드: 제안서·리포트 다운로드 버튼과 같은 디자인 */
 .photo-info{align-items:center}.dl-btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border:1px solid #ddd;border-radius:2px;background:#fff;color:#171717;font-size:12px;font-weight:600;letter-spacing:.02em;transition:background .2s}.dl-btn svg{width:16px;height:16px;flex:none}.dl-btn:hover{background:#f3f4ee}@media(max-width:700px){.dl-btn{height:34px;padding:0 12px}}
 .dl-btn[aria-busy=true]{opacity:.6;cursor:progress}
+
+.portfolio-search{display:flex;align-items:center;gap:10px;margin-left:auto;width:min(210px,24vw);padding:8px 0;border-bottom:1px solid #aaa;color:#444}
+.portfolio-search:focus-within{border-color:#171717}
+.portfolio-search input{font:inherit;font-size:16px;color:#171717;width:100%;min-width:0;background:transparent;border:0}
+.portfolio-search input:focus-visible{outline:1px solid #555;outline-offset:3px}
+.portfolio-search svg{flex:none}
+@media(max-width:900px){.controls{flex-wrap:wrap}.portfolio-search{width:100%;margin-left:0}}
