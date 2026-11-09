@@ -30,7 +30,7 @@ const a=document.createElement('a');a.href=URL.createObjectURL(zip(files));a.dow
 label.textContent='다운로드'}catch(err){label.textContent='다시 시도해주세요'}finally{busy=false;btn.removeAttribute('aria-busy')}})})();
 
 // 사례별 주소: showcase.html#고려대학교-아나모픽 으로 들어오면 해당 사례 상세를 바로 연다
-function slugFor(p){const base=t=>t.replace(/[\s()·\/,&]+/g,'-').replace(/^-+|-+$/g,''),s=base(p.title);
+function slugFor(p){if(p.slug)return p.slug;const base=t=>t.replace(/[\s()·\/,&]+/g,'-').replace(/^-+|-+$/g,''),s=base(p.title);
 return projects.filter(q=>base(q.title)===s).length>1?s+'-'+p.date.slice(2).replace('.',''):s}
 function openFromHash(){const h=decodeURIComponent(location.hash.slice(1));if(!h)return;const p=projects.find(q=>slugFor(q)===h);if(p&&!(dialog.open&&active===p))openProject(p)}
 openFromHash();addEventListener('hashchange',openFromHash);
