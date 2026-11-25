@@ -20,11 +20,36 @@ openFromHash();addEventListener('hashchange',openFromHash);
 document.querySelector('#shareCase')?.addEventListener('click',()=>{if(active)luuxShare({title:`LUUX 성과 보고서 · ${active.title}`,url:luuxShareUrl('#'+slugFor(active))})});
 // 공유받은 링크에서는 상세를 닫을 수 없다(X·Esc·바깥 클릭)
 if(window.luuxShared){dialog.addEventListener('cancel',e=>e.preventDefault());dialog.close=()=>{}}
-// 다운로드: 이 보고서의 PDF·PPTX를 ZIP 하나로 저장
-(()=>{const btn=document.querySelector('#download'),label=document.querySelector('#downloadLabel');if(!btn)return;let busy=false;
-btn.addEventListener('click',async e=>{e.preventDefault();if(busy||!active)return;busy=true;btn.setAttribute('aria-busy','true');
-const p=active,list=[p.pdf,p.pptx].filter(Boolean);let done=0;label.textContent=`준비 중 0/${list.length}`;
-try{const files=await Promise.all(list.map(async src=>{const r=await fetch(src);if(!r.ok)throw new Error(src);const data=new Uint8Array(await r.arrayBuffer());
-label.textContent=`준비 중 ${++done}/${list.length}`;return{name:`${p.title}_성과보고서.${src.split('.').pop()}`,data}}));
-const a=document.createElement('a');a.href=URL.createObjectURL(luuxZip(files));a.download=`LUUX_${p.title}_성과보고서.zip`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);
-label.textContent='다운로드'}catch(err){label.textContent='다시 시도해주세요'}finally{busy=false;btn.removeAttribute('aria-busy')}})})();
+// 보고서 PDF 다운로드
+(() => {
+  const button = document.querySelector('#download');
+  const label = document.querySelector('#downloadLabel');
+  let busy = false;
+  button.addEventListener('click', async event => {
+    event.preventDefault();
+    if (busy || !active?.pdf) return;
+    busy = true;
+    button.setAttribute('aria-busy', 'true');
+    label.textContent = '준비 중';
+    const report = active;
+    try {
+      const response = await fetch(report.pdf);
+      if (!response.ok) throw new Error('PDF download failed');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = report.title + '_성과보고서.pdf';
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      label.textContent = '다운로드';
+    } catch (error) {
+      label.textContent = '다시 시도해주세요';
+    } finally {
+      busy = false;
+      button.removeAttribute('aria-busy');
+    }
+  });
+})();
